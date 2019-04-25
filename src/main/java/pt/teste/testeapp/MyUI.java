@@ -1,17 +1,23 @@
 package pt.teste.testeapp;
 
+import java.lang.ProcessBuilder.Redirect;
+
 import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -25,41 +31,49 @@ public class MyUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        final VerticalLayout layout = new VerticalLayout();
         
-        final TextField name = new TextField();
-        name.setCaption("Type your name here:");
-
-        Button button = new Button("Click Me");
-        button.addClickListener(e -> {
-            layout.addComponent(new Label("Thanks " + name.getValue() 
-                    + ", it works!"));
+    	 Label title = new Label("Menu");
+    	 
+         title.addStyleName(ValoTheme.MENU_TITLE);
+    	
+        Button button_eventos = new Button("Eventos", e -> getNavigator().navigateTo("ViewEventos"));
+        button_eventos.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
+        
+        Button button_casas = new Button("Casas");
+        button_casas.addClickListener(e -> {
+            
         });
-        Evento evento = new Evento();
         
-        evento.setName("Telmo");
-        evento.setDateStart("23-03-2019");
-        evento.setDateEnd("23-03-2019");
-        evento.setDescription("asd");
-        evento.setType("qwe");
+        Button button_users = new Button("Users");
+        button_users.addClickListener(e -> {
+           
+        });
         
-        Grid<Evento> grid = new Grid<>(Evento.class);
+        Button button_tipoEventos = new Button("Tipo Eventos");
+        button_tipoEventos.addClickListener(e -> {
+           
+        });
         
-        grid.addColumn(Evento::getDateStart)
-			.setCaption("Date Start");
-        grid.addColumn(Evento::getDateEnd)
-			.setCaption("Date End");
-        grid.addColumn(Evento::getDescription)
-			.setCaption("Description");
-        grid.addColumn(Evento::getType)
-			.setCaption("Type");
-    
-        grid.setItems(evento);
+        Button button_tipoSpot = new Button("Tipo Spot");
+        button_tipoSpot.addClickListener(e -> {
+           
+        });
         
+        CssLayout menu = new CssLayout(title, button_eventos);
+        menu.addStyleName(ValoTheme.MENU_ROOT);
         
-        layout.addComponents(name, button, grid);
+        CssLayout viewContainer = new CssLayout();
+
+        HorizontalLayout mainLayout = new HorizontalLayout(menu, viewContainer);
+        mainLayout.setSizeFull();
         
-        setContent(layout);
+        Navigator navigator = new Navigator(this, viewContainer);
+        navigator.addView("", DefaultView.class);
+        navigator.addView("ViewEventos", ViewEventos.class);
+        //navigator.addView("view2", View2.class);
+        
+        setContent(mainLayout);
+        
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
