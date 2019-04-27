@@ -32,32 +32,25 @@ public class MyUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         
-    	 Label title = new Label("Menu");
+    	Label title = new Label("Menu");
     	 
-         title.addStyleName(ValoTheme.MENU_TITLE);
+        title.addStyleName(ValoTheme.MENU_TITLE);
     	
         Button button_eventos = new Button("Eventos", e -> getNavigator().navigateTo("ViewEventos"));
         button_eventos.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
         
-        Button button_casas = new Button("Casas");
-        button_casas.addClickListener(e -> {
-            
-        });
+        Button button_casas = new Button("Casas", e -> getNavigator().navigateTo("ViewCasas"));
+        button_casas.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
         
-        Button button_users = new Button("Users");
-        button_users.addClickListener(e -> {
-           
-        });
+        Button button_users = new Button("Users", e -> getNavigator().navigateTo("ViewUsers"));
+        button_users.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
         
-        Button button_tipoEventos = new Button("Tipo Eventos");
-        button_tipoEventos.addClickListener(e -> {
-           
-        });
+        Button button_tipoEvento = new Button("Tipo Evento", e -> getNavigator().navigateTo("ViewTipoEvento"));
+        button_tipoEvento.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
         
-        Button button_tipoSpot = new Button("Tipo Spot");
-        button_tipoSpot.addClickListener(e -> {
+        Button button_tipoSpot = new Button("Tipo Spot", e -> getNavigator().navigateTo("ViewTipoSpot"));
+        button_tipoSpot.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
            
-        });
         
         CssLayout menu = new CssLayout(title, button_eventos);
         menu.addStyleName(ValoTheme.MENU_ROOT);
