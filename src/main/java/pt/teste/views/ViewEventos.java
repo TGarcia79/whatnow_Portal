@@ -1,5 +1,6 @@
 package pt.teste.views;
 
+import java.io.Console;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -12,6 +13,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import elemental.json.Json;
 import pt.teste.models.Evento;
 import pt.teste.models.TypeEvento;
 
@@ -25,9 +27,13 @@ public class ViewEventos extends Composite implements View {
     	 
 		try {
 			URL url = new URL("http://85.245.44.51:8080/v1/event/list");
-	    	 HttpURLConnection con;
+	    	HttpURLConnection con;
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
+			
+			Json jp = new Json();
+			//jp.parse(con.getContent());
+			
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
