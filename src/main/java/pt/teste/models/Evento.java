@@ -1,4 +1,4 @@
-package pt.teste.testeapp;
+package pt.teste.models;
 
 public class Evento {
 	
@@ -6,7 +6,7 @@ public class Evento {
 	private String date_start;
 	private String date_end;
 	private String description;
-	private String type;
+	private TypeEvento type;
 	
 	public String getName(){
 		return this.name;
@@ -25,7 +25,7 @@ public class Evento {
 	}
 	
 	public String getType(){
-		return this.type;
+		return this.type.getType();
 	}
 	
 	public void setName(String name){
@@ -44,7 +44,7 @@ public class Evento {
 		this.description = description;
 	}
 	
-	public void setType(String type){
+	public void setType(TypeEvento type){
 		this.type = type;
 	}
 

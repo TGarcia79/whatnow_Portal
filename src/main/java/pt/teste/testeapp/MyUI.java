@@ -19,6 +19,13 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import pt.teste.views.DefaultView;
+import pt.teste.views.ViewCasas;
+import pt.teste.views.ViewEventos;
+import pt.teste.views.ViewTypeCasa;
+import pt.teste.views.ViewTypeEvento;
+import pt.teste.views.ViewUsers;
+
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
  * (or tab) or some part of an HTML page where a Vaadin application is embedded.
@@ -45,14 +52,14 @@ public class MyUI extends UI {
         Button button_users = new Button("Users", e -> getNavigator().navigateTo("ViewUsers"));
         button_users.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
         
-        Button button_tipoEvento = new Button("Tipo Evento", e -> getNavigator().navigateTo("ViewTipoEvento"));
+        Button button_tipoEvento = new Button("Tipo Evento", e -> getNavigator().navigateTo("ViewTypeEvento"));
         button_tipoEvento.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
         
-        Button button_tipoSpot = new Button("Tipo Spot", e -> getNavigator().navigateTo("ViewTipoSpot"));
+        Button button_tipoSpot = new Button("Tipo Spot", e -> getNavigator().navigateTo("ViewTypeCasa"));
         button_tipoSpot.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
            
         
-        CssLayout menu = new CssLayout(title, button_eventos);
+        CssLayout menu = new CssLayout(title, button_eventos, button_casas, button_users, button_tipoEvento, button_tipoSpot);
         menu.addStyleName(ValoTheme.MENU_ROOT);
         
         CssLayout viewContainer = new CssLayout();
@@ -63,6 +70,10 @@ public class MyUI extends UI {
         Navigator navigator = new Navigator(this, viewContainer);
         navigator.addView("", DefaultView.class);
         navigator.addView("ViewEventos", ViewEventos.class);
+        navigator.addView("ViewCasas", ViewCasas.class);
+        navigator.addView("ViewTypeCasa", ViewTypeCasa.class);
+        navigator.addView("ViewUsers", ViewUsers.class);
+        navigator.addView("ViewTypeEvento", ViewTypeEvento.class);
         //navigator.addView("view2", View2.class);
         
         setContent(mainLayout);

@@ -1,4 +1,4 @@
-package pt.teste.testeapp;
+package pt.teste.views;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Composite;

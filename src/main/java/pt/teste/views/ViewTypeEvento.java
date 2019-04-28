@@ -1,4 +1,4 @@
-package pt.teste.testeapp;
+package pt.teste.views;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
@@ -8,10 +8,13 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import pt.teste.models.Evento;
+import pt.teste.models.TypeEvento;
 
-public class ViewCasas extends Composite implements View {
 
-    public ViewCasas() {
+public class ViewTypeEvento extends Composite implements View {
+
+    public ViewTypeEvento() {
         
     	 final VerticalLayout layout = new VerticalLayout();
 
@@ -30,26 +33,15 @@ public class ViewCasas extends Composite implements View {
              
          });
          
-         Evento casa = new Evento();
+         TypeEvento typeEvento = new TypeEvento();
          
-         casa.setName("Telmo");
-         casa.setDateStart("23-03-2019");
-         casa.setDateEnd("23-03-2019");
-         casa.setDescription("asd");
-         casa.setType("qwe");
+         typeEvento.setType("Ladys Night");
+         typeEvento.setDescription("Mulher nao paga");
          
-         Grid<Evento> grid = new Grid<>(Evento.class);
          
-         grid.addColumn(Evento::getDateStart)
- 			.setCaption("Date Start");
-         grid.addColumn(Evento::getDateEnd)
- 			.setCaption("Date End");
-         grid.addColumn(Evento::getDescription)
- 			.setCaption("Description");
-         grid.addColumn(Evento::getType)
- 			.setCaption("Type");
-     
-         grid.setItems(casa);
+         Grid<TypeEvento> grid = new Grid<>(TypeEvento.class);
+         
+         grid.setItems(typeEvento);
          
          
          layout.addComponents(buttonNovo, buttonEditar, buttonEliminar, grid);

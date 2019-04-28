@@ -1,4 +1,8 @@
-package pt.teste.testeapp;
+package pt.teste.views;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
@@ -8,12 +12,27 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import pt.teste.models.Evento;
+import pt.teste.models.TypeEvento;
+
 
 public class ViewEventos extends Composite implements View {
 
     public ViewEventos() {
         
     	 final VerticalLayout layout = new VerticalLayout();
+    	 
+    	 
+		try {
+			URL url = new URL("http://85.245.44.51:8080/v1/event/list");
+	    	 HttpURLConnection con;
+			con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	 
 
          Button buttonNovo = new Button("Novo");
          buttonNovo.addClickListener(e -> {
@@ -31,15 +50,20 @@ public class ViewEventos extends Composite implements View {
          });
          
          Evento evento = new Evento();
+         TypeEvento typeEvento = new TypeEvento();
+         typeEvento.setType("Ladys Night");
+         typeEvento.setDescription("Mulher nao paga jamais");
          
          evento.setName("Telmo");
          evento.setDateStart("23-03-2019");
          evento.setDateEnd("23-03-2019");
          evento.setDescription("asd");
-         evento.setType("qwe");
+         evento.setType(typeEvento);
+         
          
          Grid<Evento> grid = new Grid<>(Evento.class);
          
+         /*
          grid.addColumn(Evento::getDateStart)
  			.setCaption("Date Start");
          grid.addColumn(Evento::getDateEnd)
@@ -48,7 +72,8 @@ public class ViewEventos extends Composite implements View {
  			.setCaption("Description");
          grid.addColumn(Evento::getType)
  			.setCaption("Type");
-     
+          */
+         
          grid.setItems(evento);
          
          
