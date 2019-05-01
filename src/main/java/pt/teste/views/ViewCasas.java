@@ -1,5 +1,10 @@
 package pt.teste.views;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
+
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Composite;
@@ -8,6 +13,9 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import elemental.json.Json;
+import elemental.json.JsonArray;
+import elemental.json.JsonObject;
 import pt.teste.models.Casa;
 import pt.teste.models.Evento;
 import pt.teste.models.TypeCasa;
@@ -17,6 +25,26 @@ public class ViewCasas extends Composite implements View {
 
     public ViewCasas() {
         
+    	/*try {
+			URL url = new URL("http://85.245.44.51:8080/v1/spot?SpotId=1");
+	    	HttpURLConnection con;
+			con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			con.connect();
+			String text = new Scanner(con.getInputStream()).useDelimiter("\\A").next();
+			System.out.println(text);
+			JsonObject json = Json.parse(text);
+			JsonArray spot = json.getArray("SPOT");
+			for(int i = 0; i < spot.length(); i++) {
+				System.out.println(spot.getNumber(0));
+			}*/
+			
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
     	 final VerticalLayout layout = new VerticalLayout();
 
          Button buttonNovo = new Button("Novo");

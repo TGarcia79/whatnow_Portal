@@ -62,7 +62,12 @@ public class MyUI extends UI {
         CssLayout menu = new CssLayout(title, button_eventos, button_casas, button_users, button_tipoEvento, button_tipoSpot);
         menu.addStyleName(ValoTheme.MENU_ROOT);
         
+        menu.setWidth(20, Unit.PERCENTAGE);
+       // menu.setHeight(100, Unit.PERCENTAGE);
+       // menu.setSizeFull();
+        
         CssLayout viewContainer = new CssLayout();
+        viewContainer.addStyleName(ValoTheme.LAYOUT_WELL);
 
         HorizontalLayout mainLayout = new HorizontalLayout(menu, viewContainer);
         mainLayout.setSizeFull();

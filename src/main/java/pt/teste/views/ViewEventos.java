@@ -82,6 +82,8 @@ public class ViewEventos extends Composite implements View {
          
          grid.setItems(evento);
          
+         grid.setHeightUndefined();
+         
          
          layout.addComponents(buttonNovo, buttonEditar, buttonEliminar, grid);
          
