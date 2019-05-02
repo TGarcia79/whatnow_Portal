@@ -3,6 +3,7 @@ package pt.teste.views;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.vaadin.navigator.View;
@@ -24,24 +25,67 @@ import pt.teste.models.TypeCasa;
 public class ViewCasas extends Composite implements View {
 
     public ViewCasas() {
+    	
+    	ArrayList<Casa> listaCasas = new ArrayList<Casa>();
+    	
+    	/*Casa casa = new Casa();
+        TypeCasa typeCasa = new TypeCasa();
         
-    	/*try {
-			URL url = new URL("http://85.245.44.51:8080/v1/spot?SpotId=1");
+        typeCasa.setType("bar");
+        typeCasa.setDescription("bar com musica ao vivo");
+        
+        casa.setName("Telmo");
+        casa.setCommercial_name("uma coisa qq lda");
+        casa.setNif("123456789");
+        casa.setMail("mail@mail.mail");
+        casa.setPhone("911231231");
+        casa.setAddress("Rua das Canas, n18, 7dto, 1234-567 Alguidares de Baixo");
+        casa.setDescription("bela casa");
+        casa.setLatitude(38.708074);
+        casa.setLongitude(-9.153111);
+        casa.setType(typeCasa);*/
+        
+    	//Obter e mapear JSON
+    	
+    	try {
+			//URL url = new URL("http://85.245.44.51:8080/v1/spot?SpotId=1");
+			URL url = new URL("http://localhost:8090/v1/spot/list");
 	    	HttpURLConnection con;
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
 			con.connect();
 			String text = new Scanner(con.getInputStream()).useDelimiter("\\A").next();
-			System.out.println(text);
+			//System.out.println(text);
 			JsonObject json = Json.parse(text);
-			JsonArray spot = json.getArray("SPOT");
-			for(int i = 0; i < spot.length(); i++) {
-				System.out.println(spot.getNumber(0));
-			}*/
+			//System.out.println(json.getNumber("Id"));
+			JsonArray spotArray = json.getArray("SPOTs");
+			for(int i = 0; i < spotArray.length(); i++) {
+				//System.out.println(spot.getObject(i).getNumber("Id"));
+				
+				JsonObject spot = spotArray.getObject(i);
+				
+				Casa casa = new Casa();
+		        TypeCasa typeCasa = new TypeCasa();
+		        
+		        casa.setId((int)spot.getNumber("Id"));
+		        casa.setName(spot.getString("Name"));
+		        casa.setCommercial_name(spot.getString("Commercial_Name"));
+		        casa.setNif(spot.getString("NIF"));
+		        casa.setMail(spot.getString("Mail"));
+		        casa.setPhone(spot.getString("Phone"));
+		        casa.setAddress(spot.getString("Address"));
+		        casa.setDescription(spot.getString("Description"));
+		        JsonObject coordinates = spot.get(("Coordinates"));
+		        casa.setLatitude(coordinates.getNumber("y"));
+		        casa.setLongitude(coordinates.getNumber("x"));
+		        typeCasa.setType(spot.getString("Type"));
+		        casa.setType(typeCasa);
+		        
+		        listaCasas.add(casa);
+			}
 			
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
     	
@@ -62,23 +106,6 @@ public class ViewCasas extends Composite implements View {
              
          });
          
-         Casa casa = new Casa();
-         TypeCasa typeCasa = new TypeCasa();
-         
-         typeCasa.setType("bar");
-         typeCasa.setDescription("bar com musica ao vivo");
-         
-         casa.setName("Telmo");
-         casa.setCommercial_name("uma coisa qq lda");
-         casa.setNif("123456789");
-         casa.setMail("mail@mail.mail");
-         casa.setPhone("911231231");
-         casa.setAddress("Rua das Canas, n18, 7dto, 1234-567 Alguidares de Baixo");
-         casa.setDescription("bela casa");
-         casa.setLatitude(38.708074);
-         casa.setLongitude(-9.153111);
-         casa.setType(typeCasa);
-         
          Grid<Casa> grid = new Grid<>(Casa.class);
          
          /*grid.addColumn(Casa::getName)
@@ -90,7 +117,7 @@ public class ViewCasas extends Composite implements View {
          grid.addColumn(Casa::getType)
  			.setCaption("Type");*/
      
-         grid.setItems(casa);
+         grid.setItems(listaCasas);
          
          
          layout.addComponents(buttonNovo, buttonEditar, buttonEliminar, grid);
