@@ -1,12 +1,16 @@
 package pt.teste.views;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Set;
 
 import com.vaadin.navigator.View;
+import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Composite;
 import com.vaadin.ui.Grid;
@@ -44,12 +48,12 @@ public class ViewCasas extends Composite implements View {
         casa.setLatitude(38.708074);
         casa.setLongitude(-9.153111);
         casa.setType(typeCasa);*/
-        
+         
     	//Obter e mapear JSON
     	
     	try {
-			//URL url = new URL("http://85.245.44.51:8080/v1/spot?SpotId=1");
-			URL url = new URL("http://localhost:8090/v1/spot/list");
+    		URL url = new URL("http://85.245.44.51:8080/v1/spot/list");
+    		//URL url = new URL("http://localhost:8090/v1/spot/list");
 	    	HttpURLConnection con;
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
@@ -83,13 +87,15 @@ public class ViewCasas extends Composite implements View {
 		        
 		        listaCasas.add(casa);
 			}
-			
+			//con.disconnect();
 			
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
     	
     	 final VerticalLayout layout = new VerticalLayout();
+    	 
+    	 Grid<Casa> grid = new Grid<>(Casa.class);
 
          Button buttonNovo = new Button("Novo");
          buttonNovo.addClickListener(e -> {
@@ -103,10 +109,44 @@ public class ViewCasas extends Composite implements View {
 
          Button buttonEliminar = new Button("Eliminar");
          buttonEliminar.addClickListener(e -> {
-             
+             Set<Casa> casas = grid.getSelectedItems();
+             if (!casas.isEmpty()) {
+            	 //Casa[] casa = (Casa[]) casas.toArray();
+            	 for(Casa casa : casas){
+            		 try {
+            			 	String urlParameters = "spotId="+casa.getId();
+            			 	//byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
+            			 	//int    postDataLength = postData.length;
+            	    		URL url = new URL("http://85.245.44.51:8080/v1/spot/delete");
+            	    		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            	    		//add reuqest header
+            	    		con.setRequestMethod("POST");
+            	    		//con.setRequestProperty("User-Agent", USER_AGENT);
+            	    		con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+
+            	    		//String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
+            	    		
+            	    		// Send post request
+            	    		con.setDoOutput(true);
+            	    		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            	    		wr.writeBytes(urlParameters);
+            	    		wr.flush();
+            	    		wr.close();
+
+            	    		int responseCode = con.getResponseCode();
+            	    		System.out.println("\nSending 'POST' request to URL : " + url);
+            	    		System.out.println("Post parameters : " + urlParameters);
+            	    		System.out.println("Response Code : " + responseCode);
+            				//con.disconnect();
+            				Page.getCurrent().reload();
+            				
+            			} catch (IOException e1) {
+            				e1.printStackTrace();
+            			}
+            	 }
+             }
          });
-         
-         Grid<Casa> grid = new Grid<>(Casa.class);
          
          /*grid.addColumn(Casa::getName)
  			.setCaption("Nome");

@@ -67,7 +67,7 @@ public class MyUI extends UI {
        // menu.setSizeFull();
         
         CssLayout viewContainer = new CssLayout();
-        viewContainer.addStyleName(ValoTheme.LAYOUT_WELL);
+       // viewContainer.addStyleName(ValoTheme.LAYOUT_WELL);
 
         HorizontalLayout mainLayout = new HorizontalLayout(menu, viewContainer);
         mainLayout.setSizeFull();
