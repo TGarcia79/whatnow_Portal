@@ -1,5 +1,15 @@
 package pt.teste.models;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import elemental.json.Json;
+import elemental.json.JsonArray;
+import elemental.json.JsonObject;
+
 public class Casa {
 	
 	private int id;
@@ -12,6 +22,7 @@ public class Casa {
 	private String description;
 	private Double latitude;
 	private Double longitude;
+	private User user;
 	private TypeCasa type;
 	
 	public int getId() {
@@ -74,6 +85,12 @@ public class Casa {
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	public String getType() {
 		return type.getType();
 	}
@@ -81,5 +98,118 @@ public class Casa {
 		this.type = type;
 	}
 	
+	public TypeCasa getTypeObj() {
+		return this.type;
+	}
 	
+	public static ArrayList<Casa> getCasas(){
+		
+		ArrayList<Casa> listaCasas = new ArrayList<Casa>();
+    	
+    	try {
+    		URL url = new URL("http://85.245.44.51:8080/v1/spot/list");
+	    	HttpURLConnection con;
+			con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			con.connect();
+			String text = new Scanner(con.getInputStream()).useDelimiter("\\A").next();
+			//System.out.println(text);
+			JsonObject json = Json.parse(text);
+			JsonArray spotArray = json.getArray("SPOTs");
+			for(int i = 0; i < spotArray.length(); i++) {				
+				JsonObject spot = spotArray.getObject(i);
+				
+				Casa casa = new Casa();
+		        TypeCasa typeCasa = new TypeCasa();
+		        User user = new User();
+		        
+		        casa.setId((int)spot.getNumber("Id"));
+		        casa.setName(spot.getString("Name"));
+		        casa.setCommercial_name(spot.getString("Commercial_Name"));
+		        casa.setNif(spot.getString("NIF"));
+		        casa.setMail(spot.getString("Mail"));
+		        casa.setPhone(spot.getString("Phone"));
+		        casa.setAddress(spot.getString("Address"));
+		        casa.setDescription(spot.getString("Description"));
+		        JsonObject coordinates = spot.get("Coordinates");
+		        casa.setLatitude(coordinates.getNumber("y"));
+		        casa.setLongitude(coordinates.getNumber("x"));
+		        JsonObject type = spot.get("Type");
+		        typeCasa.setId((int)type.getNumber("id"));
+		        typeCasa.setType(type.getString("type"));
+		        typeCasa.setDescription(type.getString("description"));
+		        casa.setType(typeCasa);
+		        JsonObject _user = spot.get("USER");
+		        user.setId((int)_user.getNumber("id"));
+		        user.setUsername(_user.getString("Username"));
+		        user.setName(_user.getString("Name"));
+		        user.setSurname(_user.getString("Surname"));
+		        user.setMail(_user.getString("Mail"));
+		        user.setPhone(_user.getString("Phone"));
+		        casa.setUser(user);
+		        
+		        listaCasas.add(casa);
+			}
+			
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return null;
+		}
+    	
+		return listaCasas;
+	}
+	
+	public static boolean createCasa(Casa casa) {
+		return true;
+	}
+	
+	public static boolean deleteCasa(Casa casa) {
+		try {
+    		URL url = new URL("http://85.245.44.51:8080/v1/spot/delete?spotId="+casa.getId());
+    		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+    		con.setRequestMethod("POST");
+			
+    		con.connect();
+    		int a = con.getResponseCode();
+			System.out.println(a);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean editCasa(Casa casa) {
+		
+		try {
+			String urlString = "http://85.245.44.51:8080/v1/spot/edit?spot=" +
+					casa.getId() + "," +
+					casa.getName() + "," +
+					casa.getCommercial_name() + "," +
+					casa.getNif() + "," +
+					casa.getMail() + "," +
+					casa.getPhone() + "," +
+					casa.getAddress() + "," +
+					casa.getDescription() + "," +
+					casa.getLatitude() + "," +
+					casa.getLongitude() + "," +
+					casa.getTypeObj().getId() + "," +
+					casa.getUser().getId();
+			URL url = new URL(urlString.replaceAll("\\s", "%20"));
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+	
+			con.setRequestMethod("POST");
+			
+			con.connect();
+			int a = con.getResponseCode();
+			System.out.println(a);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
 }

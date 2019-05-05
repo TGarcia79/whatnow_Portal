@@ -2,11 +2,19 @@ package pt.teste.models;
 
 public class User {
 	
+	private int id;
 	private String username;
 	private String name;
 	private String surname;
 	private String mail;
 	private String phone;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getUsername() {
 		return username;
 	}
