@@ -120,15 +120,21 @@ public class ViewCasas extends Composite implements View {
     		 buttonGuardar.setVisible(true);
     		 buttonReset.setVisible(true);
     		 buttonCancelar.setVisible(true);
-	    	 
+    		 
 	    	 buttonGuardar.addClickListener(ev -> {
-    			 casa.setType(comboBox.getValue());
-    	    	 Casa.editCasa(casa);
+	    		 casa.setType(comboBox.getValue());
+	    		 try {
+					binder.writeBean(casa);
+				} catch (ValidationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+    	    	 Casa.createCasa(casa);
     	    	 Page.getCurrent().reload();
     	     });
 	    	 
 	    	 buttonReset.addClickListener(ev -> {
-		         
+    			 binder.readBean(casa);
 		     });
 	     });
 	     

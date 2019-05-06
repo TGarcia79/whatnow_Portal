@@ -3,6 +3,7 @@ package pt.teste.models;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -70,6 +71,25 @@ public static ArrayList<TypeCasa> getTypesCasa(){
 	}
 	
 	public static boolean createCasa(TypeCasa typeCasa) {
+		
+		try {
+			String params = URLEncoder.encode(typeCasa.getType(), "UTF-8") + "," +
+					URLEncoder.encode(typeCasa.getDescription(), "UTF-8");
+			String urlString = "http://85.245.44.51:8080/v1/spottype/create?spotType=";
+			URL url = new URL(urlString+params);
+			
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+	
+			con.setRequestMethod("POST");
+			
+			int a = con.getResponseCode();
+			System.out.println(a);
+		
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return false;
+		}
+		
 		return true;
 	}
 	
@@ -79,6 +99,9 @@ public static ArrayList<TypeCasa> getTypesCasa(){
     		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
     		con.setRequestMethod("POST");
+    		
+    		int a = con.getResponseCode();
+			System.out.println(a);
 			
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -91,12 +114,18 @@ public static ArrayList<TypeCasa> getTypesCasa(){
 	public static boolean editTypeCasa(TypeCasa typeCasa) {
 		
 		try {
-		URL url = new URL("http://85.245.44.51:8080/v1/spottype/edit?spotType=" +
-				typeCasa.getId() + "," +
-				typeCasa.getType());
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-		con.setRequestMethod("POST");
+			String params = URLEncoder.encode(String.valueOf(typeCasa.getId()), "UTF-8") + "," +
+					URLEncoder.encode(typeCasa.getType(), "UTF-8") + "," +
+					URLEncoder.encode(typeCasa.getDescription(), "UTF-8");
+			String urlString = "http://85.245.44.51:8080/v1/spottype/edit?spotType=";
+			URL url = new URL(urlString+params);
+					
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+	
+			con.setRequestMethod("POST");
+			
+			int a = con.getResponseCode();
+			System.out.println(a);
 		
 		} catch (IOException e1) {
 			e1.printStackTrace();

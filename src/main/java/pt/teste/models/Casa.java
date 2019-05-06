@@ -3,6 +3,7 @@ package pt.teste.models;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -160,6 +161,33 @@ public class Casa {
 	}
 	
 	public static boolean createCasa(Casa casa) {
+		
+		try {
+			String params = URLEncoder.encode(casa.getName(), "UTF-8") + "," +
+					URLEncoder.encode(casa.getCommercial_name(), "UTF-8") + "," +
+					URLEncoder.encode(casa.getNif(), "UTF-8") + "," +
+					URLEncoder.encode(casa.getMail(), "UTF-8") + "," +
+					URLEncoder.encode(casa.getPhone(), "UTF-8") + "," +
+					URLEncoder.encode(casa.getAddress(), "UTF-8") + "," +
+					URLEncoder.encode(casa.getDescription(), "UTF-8") + "," +
+					URLEncoder.encode(String.valueOf(casa.getLatitude()), "UTF-8") + "," +
+					URLEncoder.encode(String.valueOf(casa.getLongitude()), "UTF-8") + "," +
+					URLEncoder.encode(String.valueOf(casa.getTypeObj().getId()), "UTF-8") + "," +
+					URLEncoder.encode(/*String.valueOf(casa.getUser().getId())*/"1", "UTF-8");
+			String urlString = "http://85.245.44.51:8080/v1/spot/create?SPOT=";
+			URL url = new URL(urlString+params);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+	
+			con.setRequestMethod("POST");
+			
+			con.connect();
+			int a = con.getResponseCode();
+			System.out.println(a);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return false;
+		}
+		
 		return true;
 	}
 	
@@ -184,20 +212,20 @@ public class Casa {
 	public static boolean editCasa(Casa casa) {
 		
 		try {
-			String urlString = "http://85.245.44.51:8080/v1/spot/edit?spot=" +
-					casa.getId() + "," +
-					casa.getName() + "," +
-					casa.getCommercial_name() + "," +
-					casa.getNif() + "," +
-					casa.getMail() + "," +
-					casa.getPhone() + "," +
-					casa.getAddress() + "," +
-					casa.getDescription() + "," +
-					casa.getLatitude() + "," +
-					casa.getLongitude() + "," +
-					casa.getTypeObj().getId() + "," +
-					casa.getUser().getId();
-			URL url = new URL(urlString.replaceAll("\\s", "%20"));
+			String params = URLEncoder.encode(String.valueOf(casa.getId()), "UTF-8") + "," +
+					URLEncoder.encode(casa.getName(), "UTF-8") + "," +
+					URLEncoder.encode(casa.getCommercial_name(), "UTF-8") + "," +
+					URLEncoder.encode(casa.getNif(), "UTF-8") + "," +
+					URLEncoder.encode(casa.getMail(), "UTF-8") + "," +
+					URLEncoder.encode(casa.getPhone(), "UTF-8") + "," +
+					URLEncoder.encode(casa.getAddress(), "UTF-8") + "," +
+					URLEncoder.encode(casa.getDescription(), "UTF-8") + "," +
+					URLEncoder.encode(String.valueOf(casa.getLatitude()), "UTF-8") + "," +
+					URLEncoder.encode(String.valueOf(casa.getLongitude()), "UTF-8") + "," +
+					URLEncoder.encode(String.valueOf(casa.getTypeObj().getId()), "UTF-8") + "," +
+					URLEncoder.encode(String.valueOf(casa.getUser().getId()), "UTF-8");
+			String urlString = "http://85.245.44.51:8080/v1/spot/edit?spot=";
+			URL url = new URL(urlString+params);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 	
 			con.setRequestMethod("POST");
