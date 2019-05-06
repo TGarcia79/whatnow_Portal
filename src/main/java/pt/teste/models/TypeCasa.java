@@ -73,7 +73,7 @@ public static ArrayList<TypeCasa> getTypesCasa(){
 		return typesCasa;
 	}
 	
-	public static boolean createCasa(TypeCasa typeCasa) {
+	public static boolean createTypeCasa(TypeCasa typeCasa) {
 		
 		try {
 			String params = URLEncoder.encode(typeCasa.getType(), "UTF-8") + "," +

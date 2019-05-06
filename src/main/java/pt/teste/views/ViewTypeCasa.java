@@ -1,49 +1,147 @@
 package pt.teste.views;
 
+import java.util.ArrayList;
+import java.util.Set;
+
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.navigator.View;
+import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Composite;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import pt.teste.models.Evento;
 import pt.teste.models.TypeCasa;
 
 
 public class ViewTypeCasa extends Composite implements View {
 
     public ViewTypeCasa() {
+    	
+    	ArrayList<TypeCasa> typesCasa = TypeCasa.getTypesCasa();
         
-    	 final VerticalLayout layout = new VerticalLayout();
-
-         Button buttonNovo = new Button("Novo");
-         buttonNovo.addClickListener(e -> {
-             
-         });
+    	final VerticalLayout layout = new VerticalLayout();
+		 
+		 //Table
+		 Grid<TypeCasa> grid = new Grid<>(TypeCasa.class);
+		 //set/retrieve data to form
+		 Binder<TypeCasa> binder = new Binder<>(TypeCasa.class);
+		 
+		 //Form fields
+		 TextField typeField = new TextField();
+		 binder.forField(typeField).bind(TypeCasa::getType, TypeCasa::setType);
+		 typeField.setVisible(false);
+		 typeField.setCaption("Tipo:");
+		 
+		 TextField descriptionField = new TextField();
+		 binder.forField(descriptionField).bind(TypeCasa::getDescription, TypeCasa::setDescription);
+		 descriptionField.setVisible(false);
+		 descriptionField.setCaption("Descrição:");
+	
+		 //Buttons
+	     Button buttonNovo = new Button("Novo");
+	     Button buttonEditar = new Button("Editar");
+	     Button buttonEliminar = new Button("Eliminar");
+	     Button buttonGuardar = new Button("Guardar");
+	     Button buttonReset = new Button("Reset");
+	     Button buttonCancelar = new Button("Cancelar");
+	     
+	     buttonGuardar.setVisible(false);
+		 buttonReset.setVisible(false);
+		 buttonCancelar.setVisible(false);
+	     
+	     //Listeners
+	     buttonNovo.addClickListener(e -> {
+	    	 
+	    	 TypeCasa typeCasa = new TypeCasa();
+	    	 
+	    	 typeField.setVisible(true);
+	   		 descriptionField.setVisible(true);
+	   		 
+	   		 grid.setVisible(false);
+	   		 buttonNovo.setVisible(false);
+	   		 buttonEditar.setVisible(false);
+	   		 buttonEliminar.setVisible(false);
+	   		 buttonGuardar.setVisible(true);
+	   		 buttonReset.setVisible(true);
+	   		 buttonCancelar.setVisible(true);
+   		 
+	    	 buttonGuardar.addClickListener(ev -> {
+	    		 
+	    		 try {
+					binder.writeBean(typeCasa);
+				} catch (ValidationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    		 TypeCasa.createTypeCasa(typeCasa);
+	   	    	 Page.getCurrent().reload();
+	   	     });
+	    	 
+	    	 buttonReset.addClickListener(ev -> {
+	    		 binder.readBean(typeCasa);
+		     });
+	     });
+	     
+		
+	     buttonCancelar.addClickListener(e -> {
+	    	 Page.getCurrent().reload();
+	     });
+	     
+	     buttonEditar.addClickListener(e -> {
+	    	 Set<TypeCasa> typeCasas = grid.getSelectedItems();
+	         if (!typeCasas.isEmpty()) {
+	        	 for(TypeCasa typeCasa : typeCasas){
+	        		 binder.readBean(typeCasa);
+	        		 
+	        		 typeField.setVisible(true);
+	        		 descriptionField.setVisible(true);
+	        		 
+	        		 grid.setVisible(false);
+	        		 buttonNovo.setVisible(false);
+	        		 buttonEditar.setVisible(false);
+	        		 buttonEliminar.setVisible(false);
+	        		 buttonGuardar.setVisible(true);
+	        		 buttonReset.setVisible(true);
+	        		 buttonCancelar.setVisible(true);
+	        		 
+	        		 buttonGuardar.addClickListener(ev -> {
+	        			 try {
+							binder.writeBean(typeCasa);
+						} catch (ValidationException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+	        			 TypeCasa.editTypeCasa(typeCasa);
+	        	    	 Page.getCurrent().reload();
+	        	     });
+	        		 
+	        		 buttonReset.addClickListener(ev -> {
+	        			 binder.readBean(typeCasa);
+	        	     });
+	        	 }
+	         }
+	     });
+	     
+	     buttonEliminar.addClickListener(e -> {
+	    	 Set<TypeCasa> typeCasas = grid.getSelectedItems();
+	         if (!typeCasas.isEmpty()) {
+	        	 for(TypeCasa typeCasa : typeCasas){
+	        		 TypeCasa.deleteTypeCasa(typeCasa);
+	        	 }
+	        	 Page.getCurrent().reload();
+	         }
+	     });
          
-         Button buttonEditar = new Button("Editar");
-         buttonEditar.addClickListener(e -> {
-             
-         });
-
-         Button buttonEliminar = new Button("Eliminar");
-         buttonEliminar.addClickListener(e -> {
-             
-         });
-         
-         TypeCasa typeCasa = new TypeCasa();
-         
-         typeCasa.setType("bar");
-         typeCasa.setDescription("bar com musica ao vivo");
-         
-         Grid<TypeCasa> grid = new Grid<>(TypeCasa.class);
-    
-         grid.setItems(typeCasa);
+         grid.removeColumn("id");
+	     grid.setColumns("type", "description");
+         grid.setItems(typesCasa);
          
          
-         layout.addComponents(buttonNovo, buttonEditar, buttonEliminar, grid);
+         layout.addComponents(buttonNovo, buttonEditar, buttonEliminar, buttonGuardar, 
+	    		 buttonReset, buttonCancelar, grid, typeField, descriptionField);
          
          setCompositionRoot(layout);
     	
