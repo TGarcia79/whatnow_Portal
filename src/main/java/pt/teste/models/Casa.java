@@ -1,6 +1,10 @@
 package pt.teste.models;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -113,7 +117,8 @@ public class Casa {
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
 			con.connect();
-			String text = new Scanner(con.getInputStream()).useDelimiter("\\A").next();
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+			String text = new Scanner(in).useDelimiter("\\A").next();
 			//System.out.println(text);
 			JsonObject json = Json.parse(text);
 			JsonArray spotArray = json.getArray("SPOTs");
