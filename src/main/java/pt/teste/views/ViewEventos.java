@@ -24,21 +24,6 @@ public class ViewEventos extends Composite implements View {
         
     	 final VerticalLayout layout = new VerticalLayout();
     	 
-    	 
-		try {
-			URL url = new URL("http://85.245.44.51:8080/v1/event/list");
-	    	HttpURLConnection con;
-			con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("GET");
-			
-			Json jp = new Json();
-			//jp.parse(con.getContent());
-			
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-    	 
 
          Button buttonNovo = new Button("Novo");
          buttonNovo.addClickListener(e -> {
@@ -69,16 +54,6 @@ public class ViewEventos extends Composite implements View {
          
          Grid<Evento> grid = new Grid<>(Evento.class);
          
-         /*
-         grid.addColumn(Evento::getDateStart)
- 			.setCaption("Date Start");
-         grid.addColumn(Evento::getDateEnd)
- 			.setCaption("Date End");
-         grid.addColumn(Evento::getDescription)
- 			.setCaption("Description");
-         grid.addColumn(Evento::getType)
- 			.setCaption("Type");
-          */
          
          grid.setItems(evento);
          

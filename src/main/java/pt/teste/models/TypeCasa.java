@@ -12,8 +12,14 @@ import java.util.Scanner;
 import elemental.json.Json;
 import elemental.json.JsonArray;
 import elemental.json.JsonObject;
+import pt.teste.testeapp.Constants;
 
 public class TypeCasa {
+	
+	private final static String LIST_URL = "/v1/spottype/list";
+	private final static String CREATE_URL = "/v1/spottype/create?spotType=";
+	private final static String DELETE_URL = "/v1/spottype/delete?spotTypeId=";
+	private final static String EDIT_URL = "/v1/spottype/edit?spotType=";
 	
 	private int id;
 	private String type;
@@ -43,7 +49,7 @@ public static ArrayList<TypeCasa> getTypesCasa(){
 		ArrayList<TypeCasa> typesCasa = new ArrayList<TypeCasa>();
     	
     	try {
-    		URL url = new URL("http://85.245.44.51:8080/v1/spottype/list");
+    		URL url = new URL(Constants.rootURL + LIST_URL);
 	    	HttpURLConnection con;
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
@@ -78,7 +84,7 @@ public static ArrayList<TypeCasa> getTypesCasa(){
 		try {
 			String params = URLEncoder.encode(typeCasa.getType(), "UTF-8") + "," +
 					URLEncoder.encode(typeCasa.getDescription(), "UTF-8");
-			String urlString = "http://85.245.44.51:8080/v1/spottype/create?spotType=";
+			String urlString = Constants.rootURL + CREATE_URL;
 			URL url = new URL(urlString+params);
 			
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -98,7 +104,7 @@ public static ArrayList<TypeCasa> getTypesCasa(){
 	
 	public static boolean deleteTypeCasa(TypeCasa typeCasa) {
 		try {
-    		URL url = new URL("http://85.245.44.51:8080/v1/spottype/delete?spotTypeId="+typeCasa.getId());
+    		URL url = new URL(Constants.rootURL + DELETE_URL +typeCasa.getId());
     		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
     		con.setRequestMethod("POST");
@@ -120,7 +126,7 @@ public static ArrayList<TypeCasa> getTypesCasa(){
 			String params = URLEncoder.encode(String.valueOf(typeCasa.getId()), "UTF-8") + "," +
 					URLEncoder.encode(typeCasa.getType(), "UTF-8") + "," +
 					URLEncoder.encode(typeCasa.getDescription(), "UTF-8");
-			String urlString = "http://85.245.44.51:8080/v1/spottype/edit?spotType=";
+			String urlString = Constants.rootURL + EDIT_URL;
 			URL url = new URL(urlString+params);
 					
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();

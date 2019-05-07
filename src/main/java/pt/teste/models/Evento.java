@@ -2,6 +2,11 @@ package pt.teste.models;
 
 public class Evento {
 	
+	private final static String LIST_URL = "/v1/spottype/list";
+	private final static String CREATE_URL = "/v1/spottype/create?spotType=";
+	private final static String DELETE_URL = "/v1/spottype/delete?spotTypeId=";
+	private final static String EDIT_URL = "/v1/spottype/edit?spotType=";
+	
 	private String name;
 	private String date_start;
 	private String date_end;

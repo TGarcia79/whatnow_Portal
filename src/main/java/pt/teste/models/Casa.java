@@ -1,21 +1,25 @@
 package pt.teste.models;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Scanner;
+import pt.teste.testeapp.Constants;
 
 import elemental.json.Json;
 import elemental.json.JsonArray;
 import elemental.json.JsonObject;
 
 public class Casa {
+	
+	private final static String LIST_URL = "/v1/spot/list";
+	private final static String CREATE_URL = "/v1/spot/create?SPOT=";
+	private final static String DELETE_URL = "/v1/spot/delete?spotId=";
+	private final static String EDIT_URL = "/v1/spot/edit?spot=";
 	
 	private int id;
 	private String name;
@@ -112,7 +116,7 @@ public class Casa {
 		ArrayList<Casa> listaCasas = new ArrayList<Casa>();
     	
     	try {
-    		URL url = new URL("http://85.245.44.51:8080/v1/spot/list");
+    		URL url = new URL(Constants.rootURL + LIST_URL);
 	    	HttpURLConnection con;
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
@@ -179,7 +183,7 @@ public class Casa {
 					URLEncoder.encode(String.valueOf(casa.getLongitude()), "UTF-8") + "," +
 					URLEncoder.encode(String.valueOf(casa.getTypeObj().getId()), "UTF-8") + "," +
 					URLEncoder.encode(/*String.valueOf(casa.getUser().getId())*/"1", "UTF-8");
-			String urlString = "http://85.245.44.51:8080/v1/spot/create?SPOT=";
+			String urlString = Constants.rootURL + CREATE_URL;
 			URL url = new URL(urlString+params);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 	
@@ -198,7 +202,7 @@ public class Casa {
 	
 	public static boolean deleteCasa(Casa casa) {
 		try {
-    		URL url = new URL("http://85.245.44.51:8080/v1/spot/delete?spotId="+casa.getId());
+    		URL url = new URL(Constants.rootURL + DELETE_URL +casa.getId());
     		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
     		con.setRequestMethod("POST");
@@ -229,7 +233,7 @@ public class Casa {
 					URLEncoder.encode(String.valueOf(casa.getLongitude()), "UTF-8") + "," +
 					URLEncoder.encode(String.valueOf(casa.getTypeObj().getId()), "UTF-8") + "," +
 					URLEncoder.encode(String.valueOf(casa.getUser().getId()), "UTF-8");
-			String urlString = "http://85.245.44.51:8080/v1/spot/edit?spot=";
+			String urlString = Constants.rootURL + EDIT_URL;
 			URL url = new URL(urlString+params);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 	
