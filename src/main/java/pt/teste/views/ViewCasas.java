@@ -6,6 +6,7 @@ import java.util.Set;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.converter.StringToDoubleConverter;
+import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
@@ -49,7 +50,9 @@ public class ViewCasas extends Composite implements View {
 		 nifField.setCaption("NIF:");
 		 
 		 TextField mailField = new TextField();
-		 binder.forField(mailField).bind(Casa::getMail, Casa::setMail);
+		 binder.forField(mailField).withValidator(
+				 new EmailValidator("This doesn't look like a valid email address"))
+		 		.bind(Casa::getMail, Casa::setMail);
 		 mailField.setVisible(false);
 		 mailField.setCaption("E-Mail:");
 		 
