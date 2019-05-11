@@ -9,6 +9,7 @@ import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
+import com.vaadin.server.Page.Styles;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Composite;
@@ -27,6 +28,7 @@ public class ViewCasas extends Composite implements View {
     	ArrayList<Casa> listaCasas = Casa.getCasas();
     	
 		 final VerticalLayout layout = new VerticalLayout();
+		 layout.setHeightUndefined();
 		 
 		 //Table
 		 Grid<Casa> grid = new Grid<>(Casa.class);
@@ -35,49 +37,49 @@ public class ViewCasas extends Composite implements View {
 		 
 		 //Form fields
 		 TextField nameField = new TextField();
-		 binder.forField(nameField).bind(Casa::getName, Casa::setName);
+		 binder.forField(nameField).asRequired("Insira o nome da casa").bind(Casa::getName, Casa::setName);
 		 nameField.setVisible(false);
 		 nameField.setCaption("Nome:");
 		 
 		 TextField commercialNameField = new TextField();
-		 binder.forField(commercialNameField).bind(Casa::getCommercial_name, Casa::setCommercial_name);
+		 binder.forField(commercialNameField).asRequired("Insira o nome comercial da casa").bind(Casa::getCommercial_name, Casa::setCommercial_name);
 		 commercialNameField.setVisible(false);
 		 commercialNameField.setCaption("Nome comercial:");
 		 
 		 TextField nifField = new TextField();
-		 binder.forField(nifField).bind(Casa::getNif, Casa::setNif);
+		 binder.forField(nifField).asRequired("Insira o número fiscal da casa").bind(Casa::getNif, Casa::setNif);
 		 nifField.setVisible(false);
 		 nifField.setCaption("NIF:");
 		 
 		 TextField mailField = new TextField();
-		 binder.forField(mailField).withValidator(
+		 binder.forField(mailField).asRequired().withValidator(
 				 new EmailValidator("This doesn't look like a valid email address"))
 		 		.bind(Casa::getMail, Casa::setMail);
 		 mailField.setVisible(false);
 		 mailField.setCaption("E-Mail:");
 		 
 		 TextField phoneField = new TextField();
-		 binder.forField(phoneField).bind(Casa::getPhone, Casa::setPhone);
+		 binder.forField(phoneField).asRequired("Insira um contacto telefónico").bind(Casa::getPhone, Casa::setPhone);
 		 phoneField.setVisible(false);
 		 phoneField.setCaption("Telefone:");
 		 
 		 TextField addressField = new TextField();
-		 binder.forField(addressField).bind(Casa::getAddress, Casa::setAddress);
+		 binder.forField(addressField).asRequired("Insira a morada da casa").bind(Casa::getAddress, Casa::setAddress);
 		 addressField.setVisible(false);
 		 addressField.setCaption("Morada:");
 		 
 		 TextField descriptionField = new TextField();
-		 binder.forField(descriptionField).bind(Casa::getDescription, Casa::setDescription);
+		 binder.forField(descriptionField).asRequired("Insira uma descrição da casa").bind(Casa::getDescription, Casa::setDescription);
 		 descriptionField.setVisible(false);
 		 descriptionField.setCaption("Descrição:");
 		 
 		 TextField latitudeField = new TextField();
-		 binder.forField(latitudeField).withConverter(new StringToDoubleConverter("tem de ser numero")).bind(Casa::getLatitude, Casa::setLatitude);
+		 binder.forField(latitudeField).asRequired().withConverter(new StringToDoubleConverter("tem de ser numero")).bind(Casa::getLatitude, Casa::setLatitude);
 		 latitudeField.setVisible(false);
 		 latitudeField.setCaption("Latitude:");
 		 
 		 TextField longitudeField = new TextField();
-		 binder.forField(longitudeField).withConverter(new StringToDoubleConverter("tem de ser numero")).bind(Casa::getLongitude, Casa::setLongitude);
+		 binder.forField(longitudeField).asRequired().withConverter(new StringToDoubleConverter("tem de ser numero")).bind(Casa::getLongitude, Casa::setLongitude);
 		 longitudeField.setVisible(false);
 		 longitudeField.setCaption("Longitude:");
 		 

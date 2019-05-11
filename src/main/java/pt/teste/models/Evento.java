@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -27,8 +29,10 @@ public class Evento {
 	
 	private int id;
 	private String name;
-	private LocalDateTime dateStart;
-	private LocalDateTime dateEnd;
+	private LocalDate startLocalDate;
+	private LocalTime startLocalTime;
+	private LocalDate endLocalDate;
+	private LocalTime endLocalTime;
 	private String description;
 	private TypeEvento type;
 	private ArrayList<Atribute> atributes;
@@ -41,12 +45,20 @@ public class Evento {
 		return this.name;
 	}
 	
-	public LocalDateTime getDateStart(){
-		return this.dateStart;
+	public LocalDate getDateStart(){
+		return this.startLocalDate;
 	}
 	
-	public LocalDateTime getDateEnd(){
-		return this.dateEnd;
+	public LocalDate getDateEnd(){
+		return this.endLocalDate;
+	}
+	
+	public LocalTime getTimeStart(){
+		return this.startLocalTime;
+	}
+	
+	public LocalTime getTimeEnd(){
+		return this.endLocalTime;
 	}
 	
 	public String getDescription(){
@@ -74,13 +86,31 @@ public class Evento {
 	}
 	
 	public void setDateStart(LocalDateTime date_start){
-		this.dateStart = date_start;
+		this.setStartLocalDate(date_start.toLocalDate());
+		this.setStartLocalTime(date_start.toLocalTime());
 	}
 	
 	public void setDateEnd(LocalDateTime date_end){
-		this.dateEnd = date_end;
+		this.setEndLocalDate(date_end.toLocalDate());
+		this.setEndLocalTime(date_end.toLocalTime());
 	}
 	
+	public void setStartLocalDate(LocalDate startLocalDate) {
+		this.startLocalDate = startLocalDate;
+	}
+
+	public void setStartLocalTime(LocalTime startLocalTime) {
+		this.startLocalTime = startLocalTime;
+	}
+
+	public void setEndLocalDate(LocalDate endLocalDate) {
+		this.endLocalDate = endLocalDate;
+	}
+
+	public void setEndLocalTime(LocalTime endLocalTime) {
+		this.endLocalTime = endLocalTime;
+	}
+
 	public void setDescription(String description){
 		this.description = description;
 	}

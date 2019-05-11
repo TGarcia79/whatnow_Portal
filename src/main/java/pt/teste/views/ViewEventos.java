@@ -49,12 +49,12 @@ public class ViewEventos extends Composite implements View {
 		 nameField.setVisible(false);
 		 nameField.setCaption("Nome:");
 		 
-		 /*DateField dateStartField = new DateField();
-		 binder.forField(dateStartField).bind(Evento::getDateStart, Evento::setDateEnd);
+		 DateField dateStartField = new DateField();
+		 binder.forField(dateStartField).bind(Evento::getDateStart, Evento::setStartLocalDate);
 		 dateStartField.setVisible(false);
 		 dateStartField.setCaption("Data inicio:");
 		 
-		 TextField nifField = new TextField();
+		 /*TextField nifField = new TextField();
 		 binder.forField(nifField).bind(Casa::getNif, Casa::setNif);
 		 nifField.setVisible(false);
 		 nifField.setCaption("NIF:");
@@ -109,20 +109,20 @@ public class ViewEventos extends Composite implements View {
 		 buttonCancelar.setVisible(false);
 	     
 	     //Listeners
-	     /*buttonNovo.addClickListener(e -> {
+	     buttonNovo.addClickListener(e -> {
 	    	 
 	    	 Casa casa = new Casa();
 	    	 
 	    	 nameField.setVisible(true);
-	   		 commercialNameField.setVisible(true);
-	   		 nifField.setVisible(true);
+	    	 dateStartField.setVisible(true);
+	   		 /*nifField.setVisible(true);
 	   		 mailField.setVisible(true);
 	   		 phoneField.setVisible(true);
 	   		 addressField.setVisible(true);
 	   		 descriptionField.setVisible(true);
 	   		 latitudeField.setVisible(true);
 	   		 longitudeField.setVisible(true);
-	   		 comboBox.setVisible(true);
+	   		 comboBox.setVisible(true);*/
 	   		 
 	   		 grid.setVisible(false);
 	   		 buttonNovo.setVisible(false);
@@ -132,7 +132,7 @@ public class ViewEventos extends Composite implements View {
 	   		 buttonReset.setVisible(true);
 	   		 buttonCancelar.setVisible(true);
    		 
-	    	 buttonGuardar.addClickListener(ev -> {
+	    	 /*buttonGuardar.addClickListener(ev -> {
 	    		 casa.setType(comboBox.getValue());
 	    		 try {
 					binder.writeBean(casa);
@@ -146,11 +146,11 @@ public class ViewEventos extends Composite implements View {
 	    	 
 	    	 buttonReset.addClickListener(ev -> {
    			 binder.readBean(casa);
-		     });
+		     });*/
 	     });
 	     
 		
-	     buttonCancelar.addClickListener(e -> {
+	     /*buttonCancelar.addClickListener(e -> {
 	    	 Page.getCurrent().reload();
 	     });
 	     
@@ -230,9 +230,7 @@ public class ViewEventos extends Composite implements View {
 	     
 	     
 	     layout.addComponents(buttonNovo, buttonEditar, buttonEliminar, buttonGuardar, 
-	    		 buttonReset, buttonCancelar, grid, gridAttr/*, nameField, commercialNameField,
-	    		 nifField, mailField, phoneField, addressField, descriptionField, latitudeField,
-	    		 longitudeField, comboBox*/);
+	    		 buttonReset, buttonCancelar, grid, gridAttr, nameField, dateStartField);
 	     
 	     setCompositionRoot(layout);
     	
