@@ -17,6 +17,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Composite;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -36,6 +37,10 @@ public class ViewEventos extends Composite implements View {
     	ArrayList<Evento> listaEventos = Evento.getEventos();
     	
 		 final VerticalLayout layout = new VerticalLayout();
+		 final HorizontalLayout buttonLayout = new HorizontalLayout();
+		 final HorizontalLayout textFieldLayout1 = new HorizontalLayout();
+		 final HorizontalLayout textFieldLayout2 = new HorizontalLayout();
+		 final HorizontalLayout textFieldLayout3 = new HorizontalLayout();
 		 
 		 //Table
 		 Grid<Evento> grid = new Grid<>(Evento.class);
@@ -49,52 +54,43 @@ public class ViewEventos extends Composite implements View {
 		 nameField.setVisible(false);
 		 nameField.setCaption("Nome:");
 		 
+		 TextField descriptionField = new TextField();
+		 binder.forField(descriptionField).bind(Evento::getDescription, Evento::setDescription);
+		 descriptionField.setVisible(false);
+		 descriptionField.setCaption("Descrição:");
+		 
 		 DateField dateStartField = new DateField();
 		 binder.forField(dateStartField).bind(Evento::getDateStart, Evento::setStartLocalDate);
 		 dateStartField.setVisible(false);
 		 dateStartField.setCaption("Data inicio:");
 		 
-		 /*TextField nifField = new TextField();
-		 binder.forField(nifField).bind(Casa::getNif, Casa::setNif);
-		 nifField.setVisible(false);
-		 nifField.setCaption("NIF:");
+		 TextField timeStartField = new TextField();
+		 binder.forField(timeStartField).bind(Evento::getTimeStart, Evento::setTimeStart);
+		 timeStartField.setVisible(false);
+		 timeStartField.setCaption("Hora inicio:");
+		 timeStartField.setPlaceholder("21:00");
 		 
-		 TextField mailField = new TextField();
-		 binder.forField(mailField).bind(Casa::getMail, Casa::setMail);
-		 mailField.setVisible(false);
-		 mailField.setCaption("E-Mail:");
+		 DateField dateEndField = new DateField();
+		 binder.forField(dateEndField).bind(Evento::getDateEnd, Evento::setEndLocalDate);
+		 dateEndField.setVisible(false);
+		 dateEndField.setCaption("Data fim:");
 		 
-		 TextField phoneField = new TextField();
-		 binder.forField(phoneField).bind(Casa::getPhone, Casa::setPhone);
-		 phoneField.setVisible(false);
-		 phoneField.setCaption("Telefone:");
+		 TextField timeEndField = new TextField();
+		 binder.forField(timeEndField).bind(Evento::getTimeEnd, Evento::setTimeEnd);
+		 timeEndField.setVisible(false);
+		 timeEndField.setCaption("Hora fim:");
+		 timeEndField.setPlaceholder("23:00");
 		 
-		 TextField addressField = new TextField();
-		 binder.forField(addressField).bind(Casa::getAddress, Casa::setAddress);
-		 addressField.setVisible(false);
-		 addressField.setCaption("Morada:");
-		 
-		 TextField descriptionField = new TextField();
-		 binder.forField(descriptionField).bind(Casa::getDescription, Casa::setDescription);
-		 descriptionField.setVisible(false);
-		 descriptionField.setCaption("Descrição:");
-		 
-		 TextField latitudeField = new TextField();
-		 binder.forField(latitudeField).withConverter(new StringToDoubleConverter("tem de ser numero")).bind(Casa::getLatitude, Casa::setLatitude);
-		 latitudeField.setVisible(false);
-		 latitudeField.setCaption("Latitude:");
-		 
-		 TextField longitudeField = new TextField();
-		 binder.forField(longitudeField).withConverter(new StringToDoubleConverter("tem de ser numero")).bind(Casa::getLongitude, Casa::setLongitude);
-		 longitudeField.setVisible(false);
-		 longitudeField.setCaption("Longitude:");
-		 
-		 ComboBox<TypeCasa> comboBox = new ComboBox<>();
+		 ComboBox<TypeEvento> comboBox = new ComboBox<>();
 		 comboBox.setCaption("Tipo:");
-		 comboBox.setItemCaptionGenerator(TypeCasa::getType);
+		 comboBox.setItemCaptionGenerator(TypeEvento::getType);
 
-		 comboBox.setItems(TypeCasa.getTypesCasa());
-		 comboBox.setVisible(false);*/
+		 comboBox.setItems(TypeEvento.getTypesEvento());
+		 comboBox.setVisible(false);
+		 
+		 textFieldLayout1.addComponents(nameField, descriptionField);
+		 textFieldLayout2.addComponents(dateStartField, timeStartField);
+		 textFieldLayout3.addComponents(dateEndField, timeEndField);
 	
 		 //Buttons
 	     Button buttonNovo = new Button("Novo");
@@ -104,6 +100,8 @@ public class ViewEventos extends Composite implements View {
 	     Button buttonReset = new Button("Reset");
 	     Button buttonCancelar = new Button("Cancelar");
 	     
+	     buttonLayout.addComponents(buttonNovo, buttonEditar, buttonEliminar, buttonGuardar, buttonReset, buttonCancelar);
+	     
 	     buttonGuardar.setVisible(false);
 		 buttonReset.setVisible(false);
 		 buttonCancelar.setVisible(false);
@@ -111,18 +109,15 @@ public class ViewEventos extends Composite implements View {
 	     //Listeners
 	     buttonNovo.addClickListener(e -> {
 	    	 
-	    	 Casa casa = new Casa();
+	    	 Evento evento = new Evento();
 	    	 
 	    	 nameField.setVisible(true);
+	    	 descriptionField.setVisible(true);
 	    	 dateStartField.setVisible(true);
-	   		 /*nifField.setVisible(true);
-	   		 mailField.setVisible(true);
-	   		 phoneField.setVisible(true);
-	   		 addressField.setVisible(true);
-	   		 descriptionField.setVisible(true);
-	   		 latitudeField.setVisible(true);
-	   		 longitudeField.setVisible(true);
-	   		 comboBox.setVisible(true);*/
+	   		 dateEndField.setVisible(true);
+	   		 timeStartField.setVisible(true);
+	   		 timeEndField.setVisible(true);
+	   		 comboBox.setVisible(true);
 	   		 
 	   		 grid.setVisible(false);
 	   		 buttonNovo.setVisible(false);
@@ -132,46 +127,48 @@ public class ViewEventos extends Composite implements View {
 	   		 buttonReset.setVisible(true);
 	   		 buttonCancelar.setVisible(true);
    		 
-	    	 /*buttonGuardar.addClickListener(ev -> {
-	    		 casa.setType(comboBox.getValue());
+	    	 buttonGuardar.addClickListener(ev -> {
+	    		 evento.setType(comboBox.getValue());
+	    		 //time postos manualmente porque binder não consegue! não percebi o porqu~e, está a funcionar
+	    		 evento.setTimeStart(timeStartField.getValue());
+	    		 evento.setTimeEnd(timeEndField.getValue());
 	    		 try {
-					binder.writeBean(casa);
+					binder.writeBean(evento);
+					Evento.createEvento(evento);
+					Page.getCurrent().reload();
 				} catch (ValidationException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-   	    	 Casa.createCasa(casa);
-   	    	 Page.getCurrent().reload();
+   	    	 
    	     });
 	    	 
 	    	 buttonReset.addClickListener(ev -> {
-   			 binder.readBean(casa);
-		     });*/
+   			 binder.readBean(evento);
+		     });
 	     });
 	     
 		
-	     /*buttonCancelar.addClickListener(e -> {
+	     buttonCancelar.addClickListener(e -> {
 	    	 Page.getCurrent().reload();
 	     });
 	     
 	     buttonEditar.addClickListener(e -> {
-	    	 Set<Casa> casas = grid.getSelectedItems();
-	         if (!casas.isEmpty()) {
-	        	 for(Casa casa : casas){
-	        		 binder.readBean(casa);
+	    	 Set<Evento> eventos = grid.getSelectedItems();
+	         if (!eventos.isEmpty()) {
+	        	 for(Evento evento : eventos){
+	        		 binder.readBean(evento);
 	        		 
 	        		 nameField.setVisible(true);
-	        		 commercialNameField.setVisible(true);
-	        		 nifField.setVisible(true);
-	        		 mailField.setVisible(true);
-	        		 phoneField.setVisible(true);
-	        		 addressField.setVisible(true);
-	        		 descriptionField.setVisible(true);
-	        		 latitudeField.setVisible(true);
-	        		 longitudeField.setVisible(true);
-	        		 comboBox.setVisible(true);
+	    	    	 descriptionField.setVisible(true);
+	    	    	 dateStartField.setVisible(true);
+	    	   		 dateEndField.setVisible(true);
+	    	   		 timeStartField.setVisible(true);
+	    	   		 timeEndField.setVisible(true);
+	    	   		 comboBox.setVisible(true);
 	        		 
 	        		 grid.setVisible(false);
+	        		 gridAttr.setVisible(false);
 	        		 buttonNovo.setVisible(false);
 	        		 buttonEditar.setVisible(false);
 	        		 buttonEliminar.setVisible(false);
@@ -179,40 +176,42 @@ public class ViewEventos extends Composite implements View {
 	        		 buttonReset.setVisible(true);
 	        		 buttonCancelar.setVisible(true);
 	        		 
-	        		 comboBox.setSelectedItem(casa.getTypeObj());
+	        		 comboBox.setSelectedItem(evento.getTypeObj());
 	        		 
 	        		 buttonGuardar.addClickListener(ev -> {
-	        			 casa.setType(comboBox.getValue());
+	        			 evento.setType(comboBox.getValue());
 	        			 try {
-							binder.writeBean(casa);
+							binder.writeBean(evento);
+							Evento.editEvento(evento);
+		        	    	Page.getCurrent().reload();
 						} catch (ValidationException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-	        	    	 Casa.editCasa(casa);
-	        	    	 Page.getCurrent().reload();
+	        	    	 
 	        	     });
 	        		 
 	        		 buttonReset.addClickListener(ev -> {
-	        			 binder.readBean(casa);
+	        			 binder.readBean(evento);
 	        	     });
 	        	 }
 	         }
 	     });
 	     
 	     buttonEliminar.addClickListener(e -> {
-	         Set<Casa> casas = grid.getSelectedItems();
-	         if (!casas.isEmpty()) {
-	        	 for(Casa casa : casas){
-	        		 Casa.deleteCasa(casa);
+	         Set<Evento> eventos = grid.getSelectedItems();
+	         if (!eventos.isEmpty()) {
+	        	 for(Evento evento : eventos){
+	        		 Evento.deleteEvento(evento);
 	        	 }
 	        	 Page.getCurrent().reload();
 	         }
-	     });*/
+	     });
 	     
 	     grid.removeColumn("id");
 	     grid.setColumns("name", "dateStart", "dateEnd", "description", "type");
 	     grid.setItems(listaEventos);
+	     grid.setHeight("300");
 	     gridAttr.removeColumn("id");
 	     gridAttr.setColumns("type","description");
 	     gridAttr.setHeight("300");
@@ -229,8 +228,7 @@ public class ViewEventos extends Composite implements View {
 	     });
 	     
 	     
-	     layout.addComponents(buttonNovo, buttonEditar, buttonEliminar, buttonGuardar, 
-	    		 buttonReset, buttonCancelar, grid, gridAttr, nameField, dateStartField);
+	     layout.addComponents(buttonLayout, grid, gridAttr, textFieldLayout1, textFieldLayout2, textFieldLayout3, comboBox);
 	     
 	     setCompositionRoot(layout);
     	

@@ -182,7 +182,7 @@ public class Casa {
 					URLEncoder.encode(String.valueOf(casa.getLatitude()), "UTF-8") + "," +
 					URLEncoder.encode(String.valueOf(casa.getLongitude()), "UTF-8") + "," +
 					URLEncoder.encode(String.valueOf(casa.getTypeObj().getId()), "UTF-8") + "," +
-					URLEncoder.encode(/*String.valueOf(casa.getUser().getId())*/"1", "UTF-8");
+					URLEncoder.encode(String.valueOf(casa.getUser().getId()), "UTF-8");
 			String urlString = Constants.rootURL + CREATE_URL;
 			URL url = new URL(urlString+params);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();

@@ -34,12 +34,12 @@ public class ViewTypeEvento extends Composite implements View {
 		 
 		 //Form fields
 		 TextField typeField = new TextField();
-		 binder.forField(typeField).bind(TypeEvento::getType, TypeEvento::setType);
+		 binder.forField(typeField).asRequired("Insira um tipo").bind(TypeEvento::getType, TypeEvento::setType);
 		 typeField.setVisible(false);
 		 typeField.setCaption("Tipo:");
 		 
 		 TextField descriptionField = new TextField();
-		 binder.forField(descriptionField).bind(TypeEvento::getDescription, TypeEvento::setDescription);
+		 binder.forField(descriptionField).asRequired("Insira uma descrição").bind(TypeEvento::getDescription, TypeEvento::setDescription);
 		 descriptionField.setVisible(false);
 		 descriptionField.setCaption("Descrição:");
 	
@@ -75,12 +75,12 @@ public class ViewTypeEvento extends Composite implements View {
 	    		 
 	    		 try {
 					binder.writeBean(typeEvento);
+					TypeEvento.createTypeCasa(typeEvento);
+		   	    	 Page.getCurrent().reload();
 				} catch (ValidationException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-	    		 TypeEvento.createTypeCasa(typeEvento);
-	   	    	 Page.getCurrent().reload();
 	   	     });
 	    	 
 	    	 buttonReset.addClickListener(ev -> {
@@ -113,12 +113,12 @@ public class ViewTypeEvento extends Composite implements View {
 	        		 buttonGuardar.addClickListener(ev -> {
 	        			 try {
 							binder.writeBean(typeEvento);
+							TypeEvento.editTypeCasa(typeEvento);
+		        	    	Page.getCurrent().reload();
 						} catch (ValidationException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-	        			 TypeEvento.editTypeCasa(typeEvento);
-	        	    	 Page.getCurrent().reload();
 	        	     });
 	        		 
 	        		 buttonReset.addClickListener(ev -> {

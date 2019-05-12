@@ -53,12 +53,12 @@ public class Evento {
 		return this.endLocalDate;
 	}
 	
-	public LocalTime getTimeStart(){
-		return this.startLocalTime;
+	public String getTimeStart(){
+		return this.startLocalTime.toString();
 	}
 	
-	public LocalTime getTimeEnd(){
-		return this.endLocalTime;
+	public String getTimeEnd(){
+		return this.endLocalTime.toString();
 	}
 	
 	public String getDescription(){
@@ -102,6 +102,10 @@ public class Evento {
 	public void setStartLocalTime(LocalTime startLocalTime) {
 		this.startLocalTime = startLocalTime;
 	}
+	
+	public void setTimeStart(String startLocalTime) {
+		this.startLocalTime = LocalTime.parse(startLocalTime);
+	}
 
 	public void setEndLocalDate(LocalDate endLocalDate) {
 		this.endLocalDate = endLocalDate;
@@ -109,6 +113,10 @@ public class Evento {
 
 	public void setEndLocalTime(LocalTime endLocalTime) {
 		this.endLocalTime = endLocalTime;
+	}
+	
+	public void setTimeEnd(String endLocalTime) {
+		this.endLocalTime = LocalTime.parse(endLocalTime);
 	}
 
 	public void setDescription(String description){
@@ -180,20 +188,15 @@ public static ArrayList<Evento> getEventos(){
 		return listaEventos;
 	}
 	
-	public static boolean createCasa(Casa casa) {
+	public static boolean createEvento(Evento evento) {
 		
 		try {
-			String params = URLEncoder.encode(casa.getName(), "UTF-8") + "," +
-					URLEncoder.encode(casa.getCommercial_name(), "UTF-8") + "," +
-					URLEncoder.encode(casa.getNif(), "UTF-8") + "," +
-					URLEncoder.encode(casa.getMail(), "UTF-8") + "," +
-					URLEncoder.encode(casa.getPhone(), "UTF-8") + "," +
-					URLEncoder.encode(casa.getAddress(), "UTF-8") + "," +
-					URLEncoder.encode(casa.getDescription(), "UTF-8") + "," +
-					URLEncoder.encode(String.valueOf(casa.getLatitude()), "UTF-8") + "," +
-					URLEncoder.encode(String.valueOf(casa.getLongitude()), "UTF-8") + "," +
-					URLEncoder.encode(String.valueOf(casa.getTypeObj().getId()), "UTF-8") + "," +
-					URLEncoder.encode(/*String.valueOf(casa.getUser().getId())*/"1", "UTF-8");
+			String params = URLEncoder.encode(evento.getName(), "UTF-8") + "," +
+					URLEncoder.encode(evento.getDateStart().toString() + " " + evento.getTimeStart() + ":00", "UTF-8") + "," +
+					URLEncoder.encode(evento.getDateEnd().toString() + " " + evento.getTimeEnd() + ":00", "UTF-8") + "," +
+					URLEncoder.encode(evento.getDescription(), "UTF-8") + "," +
+					URLEncoder.encode("1", "UTF-8") + "," +
+					URLEncoder.encode(String.valueOf(evento.getTypeObj().getId()), "UTF-8");
 			String urlString = Constants.rootURL + CREATE_URL;
 			URL url = new URL(urlString+params);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -211,9 +214,9 @@ public static ArrayList<Evento> getEventos(){
 		return true;
 	}
 	
-	public static boolean deleteCasa(Casa casa) {
+	public static boolean deleteEvento(Evento evento) {
 		try {
-    		URL url = new URL(Constants.rootURL + DELETE_URL +casa.getId());
+    		URL url = new URL(Constants.rootURL + DELETE_URL + evento.getId());
     		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
     		con.setRequestMethod("POST");
@@ -229,21 +232,16 @@ public static ArrayList<Evento> getEventos(){
 		return true;
 	}
 	
-	public static boolean editCasa(Casa casa) {
+	public static boolean editEvento(Evento evento) {
 		
 		try {
-			String params = URLEncoder.encode(String.valueOf(casa.getId()), "UTF-8") + "," +
-					URLEncoder.encode(casa.getName(), "UTF-8") + "," +
-					URLEncoder.encode(casa.getCommercial_name(), "UTF-8") + "," +
-					URLEncoder.encode(casa.getNif(), "UTF-8") + "," +
-					URLEncoder.encode(casa.getMail(), "UTF-8") + "," +
-					URLEncoder.encode(casa.getPhone(), "UTF-8") + "," +
-					URLEncoder.encode(casa.getAddress(), "UTF-8") + "," +
-					URLEncoder.encode(casa.getDescription(), "UTF-8") + "," +
-					URLEncoder.encode(String.valueOf(casa.getLatitude()), "UTF-8") + "," +
-					URLEncoder.encode(String.valueOf(casa.getLongitude()), "UTF-8") + "," +
-					URLEncoder.encode(String.valueOf(casa.getTypeObj().getId()), "UTF-8") + "," +
-					URLEncoder.encode(String.valueOf(casa.getUser().getId()), "UTF-8");
+			String params = URLEncoder.encode(String.valueOf(evento.getId()), "UTF-8") + "," +
+					URLEncoder.encode(evento.getName(), "UTF-8") + "," +
+					URLEncoder.encode(evento.getDateStart().toString() + " " + evento.getTimeStart() + ":00", "UTF-8") + "," +
+					URLEncoder.encode(evento.getDateEnd().toString() + " " + evento.getTimeEnd() + ":00", "UTF-8") + "," +
+					URLEncoder.encode(evento.getDescription(), "UTF-8") + "," +
+					URLEncoder.encode("1", "UTF-8") + "," +
+					URLEncoder.encode(String.valueOf(evento.getTypeObj().getId()), "UTF-8");
 			String urlString = Constants.rootURL + EDIT_URL;
 			URL url = new URL(urlString+params);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();

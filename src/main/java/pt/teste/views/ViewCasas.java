@@ -9,16 +9,17 @@ import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
-import com.vaadin.server.Page.Styles;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Composite;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import pt.teste.models.Casa;
 import pt.teste.models.TypeCasa;
+import pt.teste.models.User;
 
 
 public class ViewCasas extends Composite implements View {
@@ -28,7 +29,12 @@ public class ViewCasas extends Composite implements View {
     	ArrayList<Casa> listaCasas = Casa.getCasas();
     	
 		 final VerticalLayout layout = new VerticalLayout();
-		 layout.setHeightUndefined();
+		 final HorizontalLayout buttonLayout = new HorizontalLayout();
+		 final HorizontalLayout textFieldLayout1 = new HorizontalLayout();
+		 final HorizontalLayout textFieldLayout2 = new HorizontalLayout();
+		 final HorizontalLayout textFieldLayout3 = new HorizontalLayout();
+		 final HorizontalLayout textFieldLayout4 = new HorizontalLayout();
+		 final HorizontalLayout textFieldLayout5 = new HorizontalLayout();
 		 
 		 //Table
 		 Grid<Casa> grid = new Grid<>(Casa.class);
@@ -74,12 +80,12 @@ public class ViewCasas extends Composite implements View {
 		 descriptionField.setCaption("Descrição:");
 		 
 		 TextField latitudeField = new TextField();
-		 binder.forField(latitudeField).asRequired().withConverter(new StringToDoubleConverter("tem de ser numero")).bind(Casa::getLatitude, Casa::setLatitude);
+		 binder.forField(latitudeField).asRequired("Insira uma latitude").withConverter(new StringToDoubleConverter("tem de ser numero")).bind(Casa::getLatitude, Casa::setLatitude);
 		 latitudeField.setVisible(false);
 		 latitudeField.setCaption("Latitude:");
 		 
 		 TextField longitudeField = new TextField();
-		 binder.forField(longitudeField).asRequired().withConverter(new StringToDoubleConverter("tem de ser numero")).bind(Casa::getLongitude, Casa::setLongitude);
+		 binder.forField(longitudeField).asRequired("Insira uma longitude").withConverter(new StringToDoubleConverter("tem de ser numero")).bind(Casa::getLongitude, Casa::setLongitude);
 		 longitudeField.setVisible(false);
 		 longitudeField.setCaption("Longitude:");
 		 
@@ -89,6 +95,12 @@ public class ViewCasas extends Composite implements View {
 
 		 comboBox.setItems(TypeCasa.getTypesCasa());
 		 comboBox.setVisible(false);
+		 
+		 textFieldLayout1.addComponents(nameField, commercialNameField);
+		 textFieldLayout2.addComponents(nifField, mailField);
+		 textFieldLayout3.addComponents(phoneField, addressField);
+		 textFieldLayout4.addComponents(descriptionField, latitudeField);
+		 textFieldLayout5.addComponents(longitudeField, comboBox);
 	
 		 //Buttons
 	     Button buttonNovo = new Button("Novo");
@@ -98,6 +110,8 @@ public class ViewCasas extends Composite implements View {
 	     Button buttonReset = new Button("Reset");
 	     Button buttonCancelar = new Button("Cancelar");
 	     
+	     buttonLayout.addComponents(buttonNovo, buttonEditar, buttonEliminar, buttonGuardar, buttonReset, buttonCancelar);
+	     
 	     buttonGuardar.setVisible(false);
 		 buttonReset.setVisible(false);
 		 buttonCancelar.setVisible(false);
@@ -106,6 +120,9 @@ public class ViewCasas extends Composite implements View {
 	     buttonNovo.addClickListener(e -> {
 	    	 
 	    	 Casa casa = new Casa();
+	    	 User user = new User();
+	    	 user.setId(1);
+	    	 casa.setUser(user);
 	    	 
 	    	 nameField.setVisible(true);
     		 commercialNameField.setVisible(true);
@@ -130,12 +147,12 @@ public class ViewCasas extends Composite implements View {
 	    		 casa.setType(comboBox.getValue());
 	    		 try {
 					binder.writeBean(casa);
+					Casa.createCasa(casa);
+	    	    	Page.getCurrent().reload();
 				} catch (ValidationException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-    	    	 Casa.createCasa(casa);
-    	    	 Page.getCurrent().reload();
     	     });
 	    	 
 	    	 buttonReset.addClickListener(ev -> {
@@ -179,12 +196,12 @@ public class ViewCasas extends Composite implements View {
 	        			 casa.setType(comboBox.getValue());
 	        			 try {
 							binder.writeBean(casa);
+							Casa.editCasa(casa);
+		        	    	Page.getCurrent().reload();
 						} catch (ValidationException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-	        	    	 Casa.editCasa(casa);
-	        	    	 Page.getCurrent().reload();
 	        	     });
 	        		 
 	        		 buttonReset.addClickListener(ev -> {
@@ -207,13 +224,11 @@ public class ViewCasas extends Composite implements View {
 	     grid.removeColumn("id");
 	     grid.setColumns("name", "commercial_name", "nif", "mail", "phone", "address", "latitude", "longitude", "description", "type");
 	     grid.setItems(listaCasas);
+	     grid.setCaption("Casas");
 	     
 	     
-	     
-	     layout.addComponents(buttonNovo, buttonEditar, buttonEliminar, buttonGuardar, 
-	    		 buttonReset, buttonCancelar, grid, nameField, commercialNameField,
-	    		 nifField, mailField, phoneField, addressField, descriptionField, latitudeField,
-	    		 longitudeField, comboBox);
+	     layout.addComponents(buttonLayout, grid, textFieldLayout1, textFieldLayout2,
+	    		 textFieldLayout3, textFieldLayout4, textFieldLayout5);
 	     
 	     setCompositionRoot(layout);
     	
