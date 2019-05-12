@@ -4,6 +4,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Composite;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -17,6 +18,7 @@ public class ViewUsers extends Composite implements View {
     public ViewUsers() {
         
     	 final VerticalLayout layout = new VerticalLayout();
+    	 final HorizontalLayout buttonLayout = new HorizontalLayout();
 
          Button buttonNovo = new Button("Novo");
          buttonNovo.addClickListener(e -> {

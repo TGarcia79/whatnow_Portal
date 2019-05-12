@@ -49,8 +49,8 @@ public class MyUI extends UI {
         Button button_casas = new Button("Casas", e -> getNavigator().navigateTo("ViewCasas"));
         button_casas.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
         
-        Button button_users = new Button("Users", e -> getNavigator().navigateTo("ViewUsers"));
-        button_users.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
+        /*Button button_users = new Button("Users", e -> getNavigator().navigateTo("ViewUsers"));
+        button_users.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);*/
         
         Button button_tipoEvento = new Button("Tipo Evento", e -> getNavigator().navigateTo("ViewTypeEvento"));
         button_tipoEvento.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
@@ -59,7 +59,7 @@ public class MyUI extends UI {
         button_tipoSpot.addStyleNames(ValoTheme.BUTTON_LINK, ValoTheme.MENU_ITEM);
            
         
-        CssLayout menu = new CssLayout(title, button_eventos, button_casas, button_users, button_tipoEvento, button_tipoSpot);
+        CssLayout menu = new CssLayout(title, button_eventos, button_casas, /*button_users,*/ button_tipoEvento, button_tipoSpot);
         menu.addStyleName(ValoTheme.MENU_ROOT);
         menu.setWidth("70%");
         

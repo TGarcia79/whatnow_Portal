@@ -10,6 +10,7 @@ import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Composite;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -23,6 +24,7 @@ public class ViewTypeCasa extends Composite implements View {
     	ArrayList<TypeCasa> typesCasa = TypeCasa.getTypesCasa();
         
     	final VerticalLayout layout = new VerticalLayout();
+    	final HorizontalLayout buttonLayout = new HorizontalLayout();
 		 
 		 //Table
 		 Grid<TypeCasa> grid = new Grid<>(TypeCasa.class);
@@ -47,6 +49,8 @@ public class ViewTypeCasa extends Composite implements View {
 	     Button buttonGuardar = new Button("Guardar");
 	     Button buttonReset = new Button("Reset");
 	     Button buttonCancelar = new Button("Cancelar");
+	     
+	     buttonLayout.addComponents(buttonNovo, buttonEditar,buttonEliminar, buttonGuardar, buttonReset, buttonCancelar);
 	     
 	     buttonGuardar.setVisible(false);
 		 buttonReset.setVisible(false);
@@ -141,8 +145,7 @@ public class ViewTypeCasa extends Composite implements View {
          grid.setCaption("Tipos de casa");
          
          
-         layout.addComponents(buttonNovo, buttonEditar, buttonEliminar, buttonGuardar, 
-	    		 buttonReset, buttonCancelar, grid, typeField, descriptionField);
+         layout.addComponents(buttonLayout, grid, typeField, descriptionField);
          
          setCompositionRoot(layout);
     	

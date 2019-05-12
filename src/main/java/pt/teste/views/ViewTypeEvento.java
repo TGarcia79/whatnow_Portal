@@ -10,6 +10,7 @@ import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Composite;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -26,6 +27,7 @@ public class ViewTypeEvento extends Composite implements View {
     	ArrayList<TypeEvento> typesEvento = TypeEvento.getTypesEvento();
         
     	final VerticalLayout layout = new VerticalLayout();
+    	final HorizontalLayout buttonLayout = new HorizontalLayout();
 		 
 		 //Table
 		 Grid<TypeEvento> grid = new Grid<>(TypeEvento.class);
@@ -50,6 +52,8 @@ public class ViewTypeEvento extends Composite implements View {
 	     Button buttonGuardar = new Button("Guardar");
 	     Button buttonReset = new Button("Reset");
 	     Button buttonCancelar = new Button("Cancelar");
+	     
+	     buttonLayout.addComponents(buttonNovo, buttonEditar,buttonEliminar, buttonGuardar, buttonReset, buttonCancelar);
 	     
 	     buttonGuardar.setVisible(false);
 		 buttonReset.setVisible(false);
@@ -144,8 +148,7 @@ public class ViewTypeEvento extends Composite implements View {
          grid.setCaption("Tipos de evento");
          
          
-         layout.addComponents(buttonNovo, buttonEditar, buttonEliminar, buttonGuardar, 
-	    		 buttonReset, buttonCancelar, grid, typeField, descriptionField);
+         layout.addComponents(buttonLayout, grid, typeField, descriptionField);
          
          setCompositionRoot(layout);
     	
