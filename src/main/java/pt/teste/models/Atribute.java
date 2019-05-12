@@ -5,6 +5,8 @@ public class Atribute {
 	private int id;
 	private String type;
 	private String description;
+	//state: 0 = editar, 1 = adicionar, 2 = eliminar
+	private int state;
 	
 	public int getId() {
 		return id;
@@ -25,6 +27,11 @@ public class Atribute {
 		this.description = description;
 	}
 	
-	
+	public int getState() {
+		return state;
+	}
+	public void setState(int state) {
+		this.state = state;
+	}
 	
 }

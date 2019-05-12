@@ -141,6 +141,7 @@ public class ViewTypeEvento extends Composite implements View {
          grid.removeColumn("id");
 	     grid.setColumns("type", "description");
          grid.setItems(typesEvento);
+         grid.setCaption("Tipos de evento");
          
          
          layout.addComponents(buttonNovo, buttonEditar, buttonEliminar, buttonGuardar, 

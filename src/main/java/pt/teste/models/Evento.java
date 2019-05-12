@@ -23,9 +23,9 @@ public class Evento {
 	private final static String CREATE_URL = "/v1/event/create?Event=";
 	private final static String DELETE_URL = "/v1/event/delete?EventId=";
 	private final static String EDIT_URL = "/v1/event/edit?Event=";
-	private final static String ATRIBUTE_CREATE_URL = "/v1/event/atribute/create?Event=";
-	private final static String ATRIBUTE_DELETE_URL = "/v1/event/atribute/delete?EventId=";
-	private final static String ATRIBUTE_EDIT_URL = "/v1/event/atribute/edit?Event=";
+	private final static String ATRIBUTE_CREATE_URL = "/v1/event/atribute/create?Atribute=";
+	private final static String ATRIBUTE_DELETE_URL = "/v1/event/atribute/delete?AtributeId=";
+	private final static String ATRIBUTE_EDIT_URL = "/v1/event/atribute/edit?Atribute=";
 	
 	private int id;
 	private String name;
@@ -172,6 +172,7 @@ public static ArrayList<Evento> getEventos(){
 		        	_atribute.setId((int)atribute.getNumber("id"));
 		        	_atribute.setType(atribute.getString("type"));
 		        	_atribute.setDescription(atribute.getString("description"));
+		        	_atribute.setState(0);
 		        	
 		        	atributes.add(_atribute);
 		        }
@@ -188,7 +189,7 @@ public static ArrayList<Evento> getEventos(){
 		return listaEventos;
 	}
 	
-	public static boolean createEvento(Evento evento) {
+	public static boolean createEvento(Evento evento, ArrayList<Atribute> atributes) {
 		
 		try {
 			String params = URLEncoder.encode(evento.getName(), "UTF-8") + "," +
@@ -204,8 +205,18 @@ public static ArrayList<Evento> getEventos(){
 			con.setRequestMethod("POST");
 			
 			con.connect();
-			int a = con.getResponseCode();
-			System.out.println(a);
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+			String text = new Scanner(in).useDelimiter("\\A").next();
+			//System.out.println(text);
+			JsonObject json = Json.parse(text);
+			int eventId = (int)json.getNumber("id");
+			
+			if (atributes.size() > 0) {
+				for(Atribute atribute : atributes) {
+					createAtribute(eventId, atribute);
+				}
+			}
+			
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			return false;
@@ -216,6 +227,12 @@ public static ArrayList<Evento> getEventos(){
 	
 	public static boolean deleteEvento(Evento evento) {
 		try {
+			ArrayList<Atribute> atributes = evento.getAtributes(); 
+			if(atributes.size() > 0) {
+				for(Atribute atribute : atributes) {
+					deleteAtribute(atribute);
+				}
+			}
     		URL url = new URL(Constants.rootURL + DELETE_URL + evento.getId());
     		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
@@ -243,6 +260,88 @@ public static ArrayList<Evento> getEventos(){
 					URLEncoder.encode("1", "UTF-8") + "," +
 					URLEncoder.encode(String.valueOf(evento.getTypeObj().getId()), "UTF-8");
 			String urlString = Constants.rootURL + EDIT_URL;
+			URL url = new URL(urlString+params);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+	
+			con.setRequestMethod("POST");
+			
+			con.connect();
+			int a = con.getResponseCode();
+			System.out.println(a);
+			
+			ArrayList<Atribute> atributes = evento.getAtributes();
+			if (atributes.size() > 0) {
+				for(Atribute atribute : atributes) {
+					switch (atribute.getState()) {
+					case 0:
+						editAtribute(atribute);
+						break;
+					case 1:
+						createAtribute(evento.getId(), atribute);
+						break;
+					case 2:
+						deleteAtribute(atribute);
+						break;
+					}
+				}
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	//ATRIBUTOS
+	public static boolean createAtribute(int eventId, Atribute atribute) {
+		
+		try {
+			String params = URLEncoder.encode(String.valueOf(eventId), "UTF-8") + "," +
+					URLEncoder.encode(atribute.getType(), "UTF-8") + "," +
+					URLEncoder.encode(atribute.getDescription(), "UTF-8");
+			String urlString = Constants.rootURL + ATRIBUTE_CREATE_URL;
+			URL url = new URL(urlString+params);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+	
+			con.setRequestMethod("POST");
+			
+			con.connect();
+			int a = con.getResponseCode();
+			System.out.println(a);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean deleteAtribute(Atribute atribute) {
+		try {
+    		URL url = new URL(Constants.rootURL + ATRIBUTE_DELETE_URL + atribute.getId());
+    		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+    		con.setRequestMethod("POST");
+			
+    		con.connect();
+    		int a = con.getResponseCode();
+			System.out.println(a);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean editAtribute(Atribute atribute) {
+		
+		try {
+			String params = URLEncoder.encode(String.valueOf(atribute.getId()), "UTF-8") + "," +
+					URLEncoder.encode(atribute.getType(), "UTF-8") + "," +
+					URLEncoder.encode(atribute.getDescription(), "UTF-8");
+			String urlString = Constants.rootURL + ATRIBUTE_EDIT_URL;
 			URL url = new URL(urlString+params);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 	

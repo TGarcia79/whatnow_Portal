@@ -1,15 +1,12 @@
 package pt.teste.views;
 
-import java.io.Console;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Set;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.converter.StringToDoubleConverter;
+import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
@@ -18,15 +15,12 @@ import com.vaadin.ui.Composite;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import elemental.json.Json;
 import pt.teste.models.Atribute;
 import pt.teste.models.Casa;
 import pt.teste.models.Evento;
-import pt.teste.models.TypeCasa;
 import pt.teste.models.TypeEvento;
 
 
@@ -50,33 +44,33 @@ public class ViewEventos extends Composite implements View {
 		 
 		 //Form fields
 		 TextField nameField = new TextField();
-		 binder.forField(nameField).bind(Evento::getName, Evento::setName);
+		 binder.forField(nameField).asRequired("Insira um nome").bind(Evento::getName, Evento::setName);
 		 nameField.setVisible(false);
 		 nameField.setCaption("Nome:");
 		 
 		 TextField descriptionField = new TextField();
-		 binder.forField(descriptionField).bind(Evento::getDescription, Evento::setDescription);
+		 binder.forField(descriptionField).asRequired("Insira uma descrição").bind(Evento::getDescription, Evento::setDescription);
 		 descriptionField.setVisible(false);
 		 descriptionField.setCaption("Descrição:");
 		 
 		 DateField dateStartField = new DateField();
-		 binder.forField(dateStartField).bind(Evento::getDateStart, Evento::setStartLocalDate);
+		 binder.forField(dateStartField).asRequired("Insira uma data").bind(Evento::getDateStart, Evento::setStartLocalDate);
 		 dateStartField.setVisible(false);
 		 dateStartField.setCaption("Data inicio:");
 		 
 		 TextField timeStartField = new TextField();
-		 binder.forField(timeStartField).bind(Evento::getTimeStart, Evento::setTimeStart);
+		 binder.forField(timeStartField).asRequired("Insira uma hora").bind(Evento::getTimeStart, Evento::setTimeStart);
 		 timeStartField.setVisible(false);
 		 timeStartField.setCaption("Hora inicio:");
 		 timeStartField.setPlaceholder("21:00");
 		 
 		 DateField dateEndField = new DateField();
-		 binder.forField(dateEndField).bind(Evento::getDateEnd, Evento::setEndLocalDate);
+		 binder.forField(dateEndField).asRequired("Insira uma data").bind(Evento::getDateEnd, Evento::setEndLocalDate);
 		 dateEndField.setVisible(false);
 		 dateEndField.setCaption("Data fim:");
 		 
 		 TextField timeEndField = new TextField();
-		 binder.forField(timeEndField).bind(Evento::getTimeEnd, Evento::setTimeEnd);
+		 binder.forField(timeEndField).asRequired("Insira uma hora").bind(Evento::getTimeEnd, Evento::setTimeEnd);
 		 timeEndField.setVisible(false);
 		 timeEndField.setCaption("Hora fim:");
 		 timeEndField.setPlaceholder("23:00");
@@ -99,18 +93,20 @@ public class ViewEventos extends Composite implements View {
 	     Button buttonGuardar = new Button("Guardar");
 	     Button buttonReset = new Button("Reset");
 	     Button buttonCancelar = new Button("Cancelar");
+	     Button buttonAttr = new Button("Novo Atributo");
 	     
 	     buttonLayout.addComponents(buttonNovo, buttonEditar, buttonEliminar, buttonGuardar, buttonReset, buttonCancelar);
 	     
 	     buttonGuardar.setVisible(false);
 		 buttonReset.setVisible(false);
 		 buttonCancelar.setVisible(false);
+		 buttonAttr.setVisible(false);
 	     
 	     //Listeners
 	     buttonNovo.addClickListener(e -> {
 	    	 
 	    	 Evento evento = new Evento();
-	    	 
+	    	 	    	 
 	    	 nameField.setVisible(true);
 	    	 descriptionField.setVisible(true);
 	    	 dateStartField.setVisible(true);
@@ -126,15 +122,51 @@ public class ViewEventos extends Composite implements View {
 	   		 buttonGuardar.setVisible(true);
 	   		 buttonReset.setVisible(true);
 	   		 buttonCancelar.setVisible(true);
+	   		 buttonAttr.setVisible(true);
+	   		 
+	   		 ArrayList<Binder<Atribute>> attrBinderL = new ArrayList<Binder<Atribute>>();
+	   		 ArrayList<Atribute> atributes = new ArrayList<Atribute>();
+	   		 
+	   		 buttonAttr.addClickListener(ev -> {
+	   			final HorizontalLayout attrLayout = new HorizontalLayout();
+	   			Binder<Atribute> attrBinder = new Binder<>(Atribute.class);
+	   			attrBinderL.add(attrBinder);
+	   			 
+	   			TextField attrType = new TextField();
+	   			attrBinder.forField(attrType).asRequired("Insira um tipo").bind(Atribute::getType, Atribute::setType);
+	   			attrType.setCaption("Tipo:");
+	   			
+	   			TextField attrDesc = new TextField();
+	   			attrBinder.forField(attrDesc).asRequired("Insira uma descrição").bind(Atribute::getDescription, Atribute::setDescription);
+	   			attrDesc.setCaption("Descrição:");
+	   			
+	   			Button buttonAttrEliminar = new Button("Eliminar");
+	   			buttonAttrEliminar.setHeight("62px");
+	   			
+	   			buttonAttrEliminar.addClickListener(ev2 -> {
+	   				layout.removeComponent(attrLayout);
+	   				attrBinderL.remove(attrBinder);
+	   			});
+	   			
+	   			attrLayout.addComponents(attrType, attrDesc, buttonAttrEliminar);
+	   			layout.addComponent(attrLayout);
+		     });
+	   		 
+	   		 
    		 
-	    	 buttonGuardar.addClickListener(ev -> {
+	    	 buttonGuardar.addClickListener(ev -> {	 
 	    		 evento.setType(comboBox.getValue());
-	    		 //time postos manualmente porque binder não consegue! não percebi o porqu~e, está a funcionar
+	    		 //binder não consegue "setar" as horas! não percebi o porque, está a funcionar "setando" manualmente
 	    		 evento.setTimeStart(timeStartField.getValue());
 	    		 evento.setTimeEnd(timeEndField.getValue());
 	    		 try {
+	    			 for(int i = 0; i < attrBinderL.size(); i++) {
+	    				 Atribute atribute = new Atribute();
+	    				 attrBinderL.get(i).writeBean(atribute);
+	    				 atributes.add(atribute);
+	    			 }
 					binder.writeBean(evento);
-					Evento.createEvento(evento);
+					Evento.createEvento(evento, atributes);
 					Page.getCurrent().reload();
 				} catch (ValidationException e1) {
 					// TODO Auto-generated catch block
@@ -175,12 +207,87 @@ public class ViewEventos extends Composite implements View {
 	        		 buttonGuardar.setVisible(true);
 	        		 buttonReset.setVisible(true);
 	        		 buttonCancelar.setVisible(true);
-	        		 
+	        		 buttonAttr.setVisible(true);
+	    	   		 
+	    	   		 ArrayList<Binder<Atribute>> attrBinderL = new ArrayList<Binder<Atribute>>();
+	    	   		 ArrayList<Atribute> atributes = evento.getAtributes();
+	    	   		 
+	    	   		 if(!atributes.isEmpty()) {
+	    	   			for(Atribute atribute : atributes) {
+		    	   			final HorizontalLayout attrLayout = new HorizontalLayout();
+		    	   			Binder<Atribute> attrBinder = new Binder<>(Atribute.class);
+		    	   			attrBinderL.add(attrBinder);
+		    	   			 
+		    	   			TextField attrType = new TextField();
+		    	   			attrBinder.forField(attrType).asRequired("Insira um tipo").bind(Atribute::getType, Atribute::setType);
+		    	   			attrType.setCaption("Tipo:");
+		    	   			
+		    	   			TextField attrDesc = new TextField();
+		    	   			attrBinder.forField(attrDesc).asRequired("Insira uma descrição").bind(Atribute::getDescription, Atribute::setDescription);
+		    	   			attrDesc.setCaption("Descrição:");
+		    	   			
+		    	   			TextField attrState = new TextField();
+		    	   			attrBinder.forField(attrState).withConverter(new StringToIntegerConverter("")).bind(Atribute::getState, Atribute::setState);
+		    	   			attrState.setVisible(false);
+		    	   			
+		    	   			Button buttonAttrEliminar = new Button("Eliminar");
+		    	   			buttonAttrEliminar.setHeight("62px");
+		    	   			
+		    	   			buttonAttrEliminar.addClickListener(ev2 -> {
+		    	   				layout.removeComponent(attrLayout);
+		    	   				attrBinderL.remove(attrBinder);
+		    	   				atribute.setState(2);
+		    	   			});
+		    	   			
+		    	   			attrBinder.readBean(atribute);
+		    	   			
+		    	   			attrLayout.addComponents(attrType, attrDesc, buttonAttrEliminar, attrState);
+		    	   			layout.addComponent(attrLayout);
+		    	   		 }
+	    	   		 }	    	   		 
+	    	   		 
+	    	   		 buttonAttr.addClickListener(ev -> {
+	    	   			final HorizontalLayout attrLayout = new HorizontalLayout();
+	    	   			Binder<Atribute> attrBinder = new Binder<>(Atribute.class);
+	    	   			attrBinderL.add(attrBinder);
+	    	   			 
+	    	   			TextField attrType = new TextField();
+	    	   			attrBinder.forField(attrType).asRequired("Insira um tipo").bind(Atribute::getType, Atribute::setType);
+	    	   			attrType.setCaption("Tipo:");
+	    	   			
+	    	   			TextField attrDesc = new TextField();
+	    	   			attrBinder.forField(attrDesc).asRequired("Insira uma descrição").bind(Atribute::getDescription, Atribute::setDescription);
+	    	   			attrDesc.setCaption("Descrição:");
+	    	   			
+	    	   			TextField attrState = new TextField();
+	    	   			attrState.setValue("1");
+	    	   			attrBinder.forField(attrState).withConverter(new StringToIntegerConverter("")).bind(Atribute::getState, Atribute::setState);
+	    	   			attrState.setVisible(false);
+	    	   			
+	    	   			Button buttonAttrEliminar = new Button("Eliminar");
+	    	   			buttonAttrEliminar.setHeight("62px");
+	    	   			
+	    	   			buttonAttrEliminar.addClickListener(ev2 -> {
+	    	   				layout.removeComponent(attrLayout);
+	    	   				attrBinderL.remove(attrBinder);
+	    	   			});
+	    	   			
+	    	   			attrLayout.addComponents(attrType, attrDesc, buttonAttrEliminar, attrState);
+	    	   			layout.addComponent(attrLayout);
+	    		     });
+	    	   		 
 	        		 comboBox.setSelectedItem(evento.getTypeObj());
 	        		 
 	        		 buttonGuardar.addClickListener(ev -> {
 	        			 evento.setType(comboBox.getValue());
 	        			 try {
+	        				 for(int i = 0; i < attrBinderL.size(); i++) {
+	    	    				 Atribute atribute = new Atribute();
+	    	    				 attrBinderL.get(i).writeBean(atribute);
+	    	    				 if(atribute.getState() == 1) {
+	    	    					 atributes.add(atribute);
+	    	    				 }
+	    	    			 }
 							binder.writeBean(evento);
 							Evento.editEvento(evento);
 		        	    	Page.getCurrent().reload();
@@ -209,13 +316,15 @@ public class ViewEventos extends Composite implements View {
 	     });
 	     
 	     grid.removeColumn("id");
-	     grid.setColumns("name", "dateStart", "dateEnd", "description", "type");
+	     grid.setColumns("name", "dateStart", "timeStart", "dateEnd", "timeEnd", "description", "type");
 	     grid.setItems(listaEventos);
 	     grid.setHeight("300");
+	     grid.setCaption("Eventos");
 	     gridAttr.removeColumn("id");
 	     gridAttr.setColumns("type","description");
 	     gridAttr.setHeight("300");
 	     gridAttr.setVisible(false);
+	     gridAttr.setCaption("Atributos");
 	     
 	     grid.addSelectionListener(event -> {
 	    	 Set<Evento> eventoTemp = grid.getSelectedItems();
@@ -227,8 +336,7 @@ public class ViewEventos extends Composite implements View {
 	    	 }
 	     });
 	     
-	     
-	     layout.addComponents(buttonLayout, grid, gridAttr, textFieldLayout1, textFieldLayout2, textFieldLayout3, comboBox);
+	     layout.addComponents(buttonLayout, grid, gridAttr, textFieldLayout1, textFieldLayout2, textFieldLayout3, comboBox, buttonAttr);
 	     
 	     setCompositionRoot(layout);
     	

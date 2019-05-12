@@ -138,6 +138,7 @@ public class ViewTypeCasa extends Composite implements View {
          grid.removeColumn("id");
 	     grid.setColumns("type", "description");
          grid.setItems(typesCasa);
+         grid.setCaption("Tipos de casa");
          
          
          layout.addComponents(buttonNovo, buttonEditar, buttonEliminar, buttonGuardar, 
