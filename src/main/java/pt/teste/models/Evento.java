@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -155,10 +156,10 @@ public static ArrayList<Evento> getEventos(){
 		        
 		        evento.setId((int)event.getNumber("Id"));
 		        evento.setName(event.getString("Name"));
-		        String dateTemp = event.getString("Date_Start");		        
-		        evento.setDateStart(LocalDateTime.parse(dateTemp.substring(0, dateTemp.length()-1)));
+		        String dateTemp = event.getString("Date_Start");
+		        evento.setDateStart(LocalDateTime.parse(dateTemp.replace(" ", "T")));
 		        dateTemp = event.getString("Date_End");
-		        evento.setDateEnd(LocalDateTime.parse(dateTemp.substring(0, dateTemp.length()-1)));
+		        evento.setDateEnd(LocalDateTime.parse(dateTemp.replace(" ", "T")));
 		        evento.setDescription(event.getString("Description"));
 		        JsonObject type = event.get("Type");
 		        typeEvento.setId((int)type.getNumber("id"));

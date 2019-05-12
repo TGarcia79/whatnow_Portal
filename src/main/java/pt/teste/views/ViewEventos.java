@@ -230,12 +230,15 @@ public class ViewEventos extends Composite implements View {
 		    	   			attrBinder.forField(attrState).withConverter(new StringToIntegerConverter("")).bind(Atribute::getState, Atribute::setState);
 		    	   			attrState.setVisible(false);
 		    	   			
+		    	   			TextField attrId = new TextField();
+		    	   			attrBinder.forField(attrId).withConverter(new StringToIntegerConverter("")).bind(Atribute::getId, Atribute::setId);
+		    	   			attrId.setVisible(false);
+		    	   			
 		    	   			Button buttonAttrEliminar = new Button("Eliminar");
 		    	   			buttonAttrEliminar.setHeight("62px");
 		    	   			
 		    	   			buttonAttrEliminar.addClickListener(ev2 -> {
 		    	   				layout.removeComponent(attrLayout);
-		    	   				attrBinderL.remove(attrBinder);
 		    	   				atribute.setState(2);
 		    	   			});
 		    	   			
@@ -284,8 +287,15 @@ public class ViewEventos extends Composite implements View {
 	        				 for(int i = 0; i < attrBinderL.size(); i++) {
 	    	    				 Atribute atribute = new Atribute();
 	    	    				 attrBinderL.get(i).writeBean(atribute);
-	    	    				 if(atribute.getState() == 1) {
+	    	    				 if (atribute.getState() == 1) {
 	    	    					 atributes.add(atribute);
+	    	    				 } else if (atribute.getState() == 0) {
+	    	    					 for(Atribute attr : atributes) {
+	    	    						 if (attr.getId() == atribute.getId()){
+	    	    							 attr.setType(atribute.getType());
+	    	    							 attr.setDescription(atribute.getDescription());
+	    	    						 }
+	    	    					 }
 	    	    				 }
 	    	    			 }
 							binder.writeBean(evento);
