@@ -7,8 +7,10 @@ import javax.servlet.annotation.WebServlet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.BrowserFrame;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Grid;
@@ -78,6 +80,12 @@ public class MyUI extends UI {
         navigator.addView("ViewUsers", ViewUsers.class);
         navigator.addView("ViewTypeEvento", ViewTypeEvento.class);
         //navigator.addView("view2", View2.class);
+        
+        BrowserFrame browser = new BrowserFrame("Browser",
+        	    new ExternalResource("https://app.powerbi.com/view?r=eyJrIjoiMTU5NTNiMDQtYjA5Ni00NGUyLWFiYWMtMDU4NmMzOGEyZGQxIiwidCI6IjU4MDRhNWVkLWJkZTktNDQzZC1hY2M1LTU5NTVkOGM3ZjE2NyIsImMiOjh9"));
+        	browser.setWidth("800px");
+        	browser.setHeight("600px");
+        	mainLayout.addComponent(browser);
         
         setContent(mainLayout);
         
